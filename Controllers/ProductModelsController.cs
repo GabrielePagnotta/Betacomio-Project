@@ -14,6 +14,7 @@ namespace Betacomio_Project.Controllers
     public class ProductModelsController : ControllerBase
     {
         private readonly AdventureWorksLt2019Context _context;
+        SqlQuery test=new SqlQuery();
 
         public ProductModelsController(AdventureWorksLt2019Context context)
         {
@@ -28,7 +29,8 @@ namespace Betacomio_Project.Controllers
           {
               return NotFound();
           }
-            return await _context.ProductModels.Include(x=>x.ProductModelProductDescriptions).Include(h=>h.Products).ToListAsync();
+             return await _context.ProductModels.Include(x=>x.ProductModelProductDescriptions).Include(h=>h.Products).ToListAsync();
+          //  return  test.Homequery().ToArray();
         }
 
         // GET: api/ProductModels/5
