@@ -28,7 +28,7 @@ namespace Betacomio_Project.Controllers
           {
               return NotFound();
           }
-            return await _context.ProductModels.ToListAsync();
+            return await _context.ProductModels.Include(x=>x.ProductModelProductDescriptions).Include(h=>h.Products).ToListAsync();
         }
 
         // GET: api/ProductModels/5
