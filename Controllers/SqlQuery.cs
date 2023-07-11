@@ -91,28 +91,11 @@ namespace Betacomio_Project.Controllers
             return r;
         }
 
-        public List<string> HomequeryModelNames(string model_name) {
-
-            List<string> r = new List<string>();
-            try
-            {
-                SqlCommand cmd = new SqlCommand("SELECT SalesLT.Product.Name AS NomeProdotto, SalesLT.Product.Color, SalesLT.Product.ListPrice, SalesLT.Product.Size, SalesLT.Product.Weight, SalesLT.ProductCategory.Name AS NomeCategoria, SalesLT.ProductDescription.Description, \r\n                  SalesLT.ProductModel.Name AS NomeModello\r\nFROM     SalesLT.Product INNER JOIN\r\n                  SalesLT.ProductCategory ON SalesLT.Product.ProductCategoryID = SalesLT.ProductCategory.ProductCategoryID INNER JOIN\r\n                  SalesLT.ProductModel ON SalesLT.Product.ProductModelID = SalesLT.ProductModel.ProductModelID CROSS JOIN\r\n                  SalesLT.ProductDescription\r\nWHERE  (SalesLT.ProductModel.Name LIKE '@model_name%')", conn);
-                cmd.Parameters.Add(new SqlParameter("@model_name", model_name));
-                DataTable dt = new DataTable();
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.Fill(dt);
-                foreach (DataRow dr in dt.Rows)
-                {
-                    r.Add(GetRowDetail(dr));
-                }
-            }
-            catch (Exception ex)
-            {
-
-                Console.WriteLine($"Errore nel GetData: {ex.Message}");
-            }
-
-            return r;
+        public void Homequery(string _contex)
+        {
+            SqlCommand cmd = conn.CreateCommand();
+            
+            
         }
     }
 }
