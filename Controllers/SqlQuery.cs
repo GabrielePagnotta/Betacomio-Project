@@ -26,7 +26,7 @@ namespace Betacomio_Project.Controllers
 
         public void Homequery(string _contex)
         {
-            SqlCommand cmd = conn.CreateCommand();
+            SqlCommand cmd = conn.CreateCommand();vvv
             
             
         }
