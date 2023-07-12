@@ -1,7 +1,9 @@
+using Betacomio_Project.Controllers;
 using Betacomio_Project.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json.Serialization;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
