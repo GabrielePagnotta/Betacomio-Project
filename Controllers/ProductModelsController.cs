@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Betacomio_Project.Models;
+using NuGet.Versioning;
 
 namespace Betacomio_Project.Controllers
 {
-    [Route("api/[controller]")]
+    
+    [Route("[controller]")]
     [ApiController]
     public class ProductModelsController : ControllerBase
     {
@@ -21,7 +23,9 @@ namespace Betacomio_Project.Controllers
             _context = context;
         }
 
-        // GET: api/ProductModels
+
+             #region chiamata GET
+        //https://localhost:7284/ProductModels -- chiamata get 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductModel>>> GetProductModels()
         {
@@ -32,8 +36,13 @@ namespace Betacomio_Project.Controllers
              return await _context.ProductModels.Include(x=>x.ProductModelProductDescriptions).Include(h=>h.Products).ToListAsync();
           //  return  test.Homequery().ToArray();
         }
+        #endregion 
 
-        // GET: api/ProductModels/5
+
+
+
+        #region
+        //https://localhost:7284/ProductModels-- ricerca per ID
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductModel>> GetProductModel(int id)
         {
@@ -50,72 +59,42 @@ namespace Betacomio_Project.Controllers
 
             return productModel;
         }
+        #endregion
 
-        // PUT: api/ProductModels/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProductModel(int id, ProductModel productModel)
-        {
-            if (id != productModel.ProductModelId)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(productModel).State = EntityState.Modified;
 
+        #region
+        //https://localhost:7284/ProductModels/HomePage/GetProductByName/{inserire il nome del prodotto}//
+        [Route("HomePage/GetProductByName/{name}")]
+        [HttpGet] 
+    
+        public async Task<ActionResult<ProductModel>> GetName(string name)
+        {  //da gestire gli errori 
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductModelExists(id))
+                if (_context.ProductModels == null)
                 {
                     return NotFound();
                 }
-                else
+                var productModel = await _context.ProductModels.Include(x => x.ProductModelProductDescriptions).Include(h => h.Products.Where(nam => nam.Name.Contains(name))).FirstAsync();
+               
+                if (productModel == null)
                 {
-                    throw;
+                    return NotFound();
                 }
+
+                return productModel;
             }
-
-            return NoContent();
-        }
-
-        // POST: api/ProductModels
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<ProductModel>> PostProductModel(ProductModel productModel)
-        {
-          if (_context.ProductModels == null)
-          {
-              return Problem("Entity set 'AdventureWorksLt2019Context.ProductModels'  is null.");
-          }
-            _context.ProductModels.Add(productModel);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetProductModel", new { id = productModel.ProductModelId }, productModel);
-        }
-
-        // DELETE: api/ProductModels/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProductModel(int id)
-        {
-            if (_context.ProductModels == null)
+            catch (Exception)
             {
-                return NotFound();
-            }
-            var productModel = await _context.ProductModels.FindAsync(id);
-            if (productModel == null)
-            {
-                return NotFound();
-            }
 
-            _context.ProductModels.Remove(productModel);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+                throw;
+            }
+           
         }
+        #endregion
+
+
 
         private bool ProductModelExists(int id)
         {
