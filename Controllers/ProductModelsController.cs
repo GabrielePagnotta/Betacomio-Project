@@ -23,6 +23,8 @@ namespace Betacomio_Project.Controllers
             _context = context;
         }
 
+
+             #region chiamata GET
         //https://localhost:7284/ProductModels -- chiamata get 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductModel>>> GetProductModels()
@@ -34,7 +36,12 @@ namespace Betacomio_Project.Controllers
              return await _context.ProductModels.Include(x=>x.ProductModelProductDescriptions).Include(h=>h.Products).ToListAsync();
           //  return  test.Homequery().ToArray();
         }
+        #endregion 
 
+
+
+
+        #region
         //https://localhost:7284/ProductModels-- ricerca per ID
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductModel>> GetProductModel(int id)
@@ -52,13 +59,17 @@ namespace Betacomio_Project.Controllers
 
             return productModel;
         }
+        #endregion
 
+
+
+        #region
         //https://localhost:7284/ProductModels/HomePage/GetProductByName/{inserire il nome del prodotto}//
         [Route("HomePage/GetProductByName/{name}")]
         [HttpGet] 
     
         public async Task<ActionResult<ProductModel>> GetName(string name)
-        {
+        {  //da gestire gli errori 
             try
             {
                 if (_context.ProductModels == null)
@@ -81,10 +92,10 @@ namespace Betacomio_Project.Controllers
             }
            
         }
+        #endregion
 
-     
 
-  
+
         private bool ProductModelExists(int id)
         {
             return (_context.ProductModels?.Any(e => e.ProductModelId == id)).GetValueOrDefault();
