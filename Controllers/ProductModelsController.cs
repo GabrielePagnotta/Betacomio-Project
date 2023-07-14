@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Betacomio_Project.Models;
 using NuGet.Versioning;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Betacomio_Project.Controllers
 {
-    
+    [Authorize("BasicAuthentication")]
     [Route("[controller]")]
     [ApiController]
     public class ProductModelsController : ControllerBase
