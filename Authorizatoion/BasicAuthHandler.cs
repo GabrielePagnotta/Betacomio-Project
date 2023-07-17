@@ -39,8 +39,8 @@ namespace FirstMVC.Auth
                 string[] arr = authorizationHeader.Split(" ");
                 string UsernamePas = Encoding.UTF8.GetString(Convert.FromBase64String(arr[1]));
                 int separatoreIndex = UsernamePas.IndexOf(":");// indice di partenza
-                string Username = UsernamePas.Substring(0, separatoreIndex);
-                string passWord = UsernamePas.Substring(separatoreIndex + 1);
+                string Username = UsernamePas.Substring(0, separatoreIndex);  //parto dalla posizione zero fino ad arrivare all'indice
+                string passWord = UsernamePas.Substring(separatoreIndex + 1); //parto dall'indice +1
                 Regex regex = new Regex("^[A-Z]{1,}[a-z\\d\\s]{7,}$");  // inserire lettera maiuscola ed almeno un numero
 
 
@@ -57,13 +57,13 @@ namespace FirstMVC.Auth
                     }
 
 
-                    if ((Username != "peppe") || (passWord != "peppe"))
+                    if ((Username != "ciao") || (passWord != "ciao12P1"))
                     {
                        
                         return  Task.FromResult(AuthenticateResult.Fail( new Exception("User e/o password errati !!!")));
                     }
 
-                    var authenticatedUser = new AuthUser("BasicAuthentication", true, "peppe");
+                    var authenticatedUser = new AuthUser("BasicAuthentication", true , "ciao");
 
                     var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(authenticatedUser)); //viene creata una chiave per accedere
 
@@ -72,7 +72,7 @@ namespace FirstMVC.Auth
                 catch (Exception err)
                 {
 
-                    throw;
+                    Console.WriteLine("errore nel metodo Autorization" + err.Message);
                 }
 
             } while (true);

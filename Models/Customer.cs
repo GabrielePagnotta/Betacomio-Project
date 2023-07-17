@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 
 namespace Betacomio_Project.Models;
 
@@ -16,6 +18,8 @@ public partial class Customer
     /// <summary>
     /// 0 = The data in FirstName and LastName are stored in western style (first name, last name) order.  1 = Eastern style (last name, first name) order.
     /// </summary>
+
+ 
     public bool NameStyle { get; set; }
 
     /// <summary>
@@ -25,7 +29,8 @@ public partial class Customer
 
     /// <summary>
     /// First name of the person.
-    /// </summary>
+    /// </summary>  
+ 
     public string FirstName { get; set; } = null!;
 
     /// <summary>

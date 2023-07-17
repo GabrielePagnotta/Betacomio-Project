@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Betacomio_Project.Controllers
 {
-    [Authorize("BasicAuthentication")]
+    //[Authorize("BasicAuthentication")]
     [Route("[controller]")]
     [ApiController]
     public class ProductModelsController : ControllerBase
