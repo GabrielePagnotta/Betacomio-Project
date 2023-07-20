@@ -28,7 +28,7 @@ namespace Betacomio_Project.Controllers
           {
               return NotFound();
           }
-            return await _context.Products.Include(cat => cat.ProductCategory).Include(prod => prod.ProductModel).ThenInclude(proAnn => proAnn.ProductModelProductDescriptions).ThenInclude(descr => descr.ProductDescription).ToListAsync();
+            return await _context.Products.Take(1).Include(cat => cat.ProductCategory).Include(prod => prod.ProductModel).ThenInclude(proAnn => proAnn.ProductModelProductDescriptions).ThenInclude(descr => descr.ProductDescription).ToListAsync();
         }
 
 
