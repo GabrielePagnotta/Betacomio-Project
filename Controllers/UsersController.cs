@@ -89,11 +89,13 @@ namespace Betacomio_Project.Controllers
           {
               return Problem("Entity set 'UserRegistryContext.Users'  is null.");
           }
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            InsertUS insertUS = new InsertUS();
+            insertUS.Usnew(user);
+            return Ok();
+            //_context.Users.Add(user);
+            //await _context.SaveChangesAsync();
 
             //return CreatedAtAction("GetUser", new { id = user.UserId }, user);
-            return Ok();
         }
 
         // DELETE: api/Users/5

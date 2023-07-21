@@ -20,4 +20,8 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\librerie\Regex\RegexCheck\RegexCheck.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -26,4 +26,6 @@ public partial class User
     public string? Nationality { get; set; }
 
     public Guid Rowguid { get; set; }
+
+
 }
