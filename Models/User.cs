@@ -13,7 +13,7 @@ public partial class User
 
     public string Surname { get; set; } = null!;
 
-    public int? Age { get; set; }
+    public DateTime? BirthYear { get; set; }
 
     public string Email { get; set; } = null!;
 
@@ -26,6 +26,4 @@ public partial class User
     public string? Nationality { get; set; }
 
     public Guid Rowguid { get; set; }
-
-
 }

@@ -6,13 +6,17 @@ namespace Betacomio_Project.Models;
 
 public partial class AdventureWorksLt2019Context : DbContext
 {
-    
+
     public AdventureWorksLt2019Context(DbContextOptions<AdventureWorksLt2019Context> options)
         : base(options)
     {
     }
 
     public virtual DbSet<Address> Addresses { get; set; }
+
+    public virtual DbSet<AdminProductsView> AdminProductsViews { get; set; }
+
+    public virtual DbSet<AdminUsersRegistry> AdminUsersRegistries { get; set; }
 
     public virtual DbSet<BuildVersion> BuildVersions { get; set; }
 
@@ -35,6 +39,8 @@ public partial class AdventureWorksLt2019Context : DbContext
     public virtual DbSet<SalesOrderDetail> SalesOrderDetails { get; set; }
 
     public virtual DbSet<SalesOrderHeader> SalesOrderHeaders { get; set; }
+
+    public virtual DbSet<UserProductsView> UserProductsViews { get; set; }
 
     public virtual DbSet<VGetAllCategory> VGetAllCategories { get; set; }
 
@@ -89,6 +95,52 @@ public partial class AdventureWorksLt2019Context : DbContext
             entity.Property(e => e.StateProvince)
                 .HasMaxLength(50)
                 .HasComment("Name of state or province.");
+        });
+
+        modelBuilder.Entity<AdminProductsView>(entity =>
+        {
+            entity.HasKey(e => e.ProductId);
+
+
+            entity.Property(e => e.CatalogDescription).HasColumnType("xml");
+            entity.Property(e => e.Color).HasMaxLength(15);
+            entity.Property(e => e.Culture)
+                .HasMaxLength(6)
+                .IsFixedLength();
+            entity.Property(e => e.Description).HasMaxLength(400);
+            entity.Property(e => e.ListPrice).HasColumnType("money");
+            entity.Property(e => e.ModelType).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.ProductId).HasColumnName("ProductID");
+            entity.Property(e => e.ProductNumber).HasMaxLength(25);
+            entity.Property(e => e.ProductType).HasMaxLength(50);
+            entity.Property(e => e.Size).HasMaxLength(5);
+            entity.Property(e => e.StandardCost).HasColumnType("money");
+            entity.Property(e => e.ThumbnailPhotoFileName).HasMaxLength(50);
+            entity.Property(e => e.Weight).HasColumnType("decimal(8, 2)");
+        });
+
+        modelBuilder.Entity<AdminUsersRegistry>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("Admin_UsersRegistry");
+
+            entity.Property(e => e.AddressId).HasColumnName("AddressID");
+            entity.Property(e => e.AddressLine1).HasMaxLength(60);
+            entity.Property(e => e.AddressLine2).HasMaxLength(60);
+            entity.Property(e => e.City).HasMaxLength(30);
+            entity.Property(e => e.CountryRegion).HasMaxLength(50);
+            entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+            entity.Property(e => e.EmailAddress).HasMaxLength(50);
+            entity.Property(e => e.FirstName).HasMaxLength(50);
+            entity.Property(e => e.LastName).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Phone).HasMaxLength(25);
+            entity.Property(e => e.PostalCode).HasMaxLength(15);
+            entity.Property(e => e.Rowguid).HasColumnName("rowguid");
+            entity.Property(e => e.StateProvince).HasMaxLength(50);
         });
 
         modelBuilder.Entity<BuildVersion>(entity =>
@@ -571,6 +623,25 @@ public partial class AdventureWorksLt2019Context : DbContext
             entity.HasOne(d => d.ShipToAddress).WithMany(p => p.SalesOrderHeaderShipToAddresses)
                 .HasForeignKey(d => d.ShipToAddressId)
                 .HasConstraintName("FK_SalesOrderHeader_Address_ShipTo_AddressID");
+        });
+
+        modelBuilder.Entity<UserProductsView>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("User_ProductsView");
+
+            entity.Property(e => e.Color).HasMaxLength(15);
+            entity.Property(e => e.Culture)
+                .HasMaxLength(6)
+                .IsFixedLength();
+            entity.Property(e => e.Description).HasMaxLength(400);
+            entity.Property(e => e.ListPrice).HasColumnType("money");
+            entity.Property(e => e.ModelType).HasMaxLength(50);
+            entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.ProductType).HasMaxLength(50);
+            entity.Property(e => e.Size).HasMaxLength(5);
+            entity.Property(e => e.Weight).HasColumnType("decimal(8, 2)");
         });
 
         modelBuilder.Entity<VGetAllCategory>(entity =>

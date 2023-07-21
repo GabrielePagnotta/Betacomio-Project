@@ -28,7 +28,7 @@ namespace Betacomio_Project.Controllers
                     user.PasswordSalt = PassSalt.Value;
 				}
 				else { new Exception("La password inserita non rispecchia i parametri di base almeno un carattere SPECIALE e NUMERI"); };
-                if (user.Age != null || user.Phone != null)
+                if (user.BirthYear != null || user.Phone != null)
                 {
                     
                     
