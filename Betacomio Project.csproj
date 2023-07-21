@@ -24,4 +24,10 @@
     <ProjectReference Include="..\librerie\Regex\RegexCheck\RegexCheck.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="RegexCheck">
+      <HintPath>..\librerie\Regex\RegexCheck\bin\Debug\net7.0\RegexCheck.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
