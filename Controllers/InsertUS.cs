@@ -32,7 +32,7 @@ namespace Betacomio_Project.Controllers
                 {
                     
                     
-                    regex.checkNumOrAge();
+                    //regex.CheckAgeAndPhone(user.Age , user.Phone);
                 }
 
 
