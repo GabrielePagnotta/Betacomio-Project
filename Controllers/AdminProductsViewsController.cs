@@ -15,6 +15,8 @@ namespace Betacomio_Project.Controllers
     {
         private readonly AdventureWorksLt2019Context _context;
 
+        SqlQuery admin = new();
+
         public AdminProductsViewsController(AdventureWorksLt2019Context context)
         {
             _context = context;
@@ -28,7 +30,8 @@ namespace Betacomio_Project.Controllers
           {
               return NotFound();
           }
-            return await _context.AdminProductsViews.ToListAsync();
+            return admin.AdminProductsV();
+                /*await _context.AdminProductsViews.ToListAsync();*/
         }
 
         // GET: api/AdminProductsViews/5
