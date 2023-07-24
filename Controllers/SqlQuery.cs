@@ -124,7 +124,7 @@ namespace Betacomio_Project.Controllers
                     ProductNumber = dr["ProductNumber"].ToString(),
                     Color = dr["color"].ToString(),
                     Size = dr["size"].ToString(),
-                    Weight = isNull ? null : (decimal)dr["Weight"],
+                    Weight = isNull ? (decimal)dr["Weight"] : null,
                     StandardCost = (decimal)dr["StandardCost"],
                     ListPrice = (decimal)dr["ListPrice"],
                     ModifiedDate = Convert.ToDateTime(dr["ModifiedDate"]),
