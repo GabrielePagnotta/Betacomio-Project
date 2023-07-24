@@ -13,7 +13,7 @@ namespace RegexCheck
             bool Email = false;
             try
             {
-                Regex regexNameSurName = new Regex(@"^[a-zA-Z]$");
+                Regex regexNameSurName = new Regex(@"^([a-zA-Z]{5})$");
                 if ((name.ToLower() == null || name.ToLower() == "") && (surname.ToLower() == null || surname.ToLower() == ""))
                 {new Exception("il campo Nome/Cognome non può essere vuoto");}
                 if (regexNameSurName.IsMatch(name) && regexNameSurName.IsMatch(surname)){}
