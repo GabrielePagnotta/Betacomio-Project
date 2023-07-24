@@ -9,6 +9,7 @@ using System.Text;
 using System.Security.Cryptography;
 
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualBasic;
 
 namespace FirstMVC.Auth
 {
@@ -71,9 +72,11 @@ namespace FirstMVC.Auth
                 {
 
                     Console.WriteLine("errore nel metodo Autorization" + err.Message);
-                }
 
-          
+                return Task.FromResult(AuthenticateResult.Fail(err));
+                }
+        
+            
 
 
         }
