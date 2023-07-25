@@ -1,5 +1,7 @@
 ﻿
 
+using Betacomio_Project.Models;
+using Microsoft.CodeAnalysis;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -114,6 +116,52 @@ namespace Betacomio_Project.Controllers
             }
 
             return r;
+        }
+
+
+        public List<AdminProductsView> AdminProductsV()
+        {
+            List<AdminProductsView> productView = new();
+            SqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT * FROM Admin_ProductsView";
+
+            bool isNull = false;
+            
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                if (dr["Weight"] == null)
+                {
+                    isNull = true;
+                }
+
+                productView.Add(new AdminProductsView
+                {
+                    ProductId = (int)dr["ProductId"],
+                    Name = dr["Name"].ToString(),
+                    ProductNumber = dr["ProductNumber"].ToString(),
+                    Color = dr["color"].ToString(),
+                    Size = dr["size"].ToString(),
+                    Weight = isNull ? (decimal)dr["Weight"] : null,
+                    StandardCost = (decimal)dr["StandardCost"],
+                    ListPrice = (decimal)dr["ListPrice"],
+                    ModifiedDate = Convert.ToDateTime(dr["ModifiedDate"]),
+                    ThumbnailPhotoFileName = dr["ThumbnailPhotoFileName"].ToString(),
+                    ProductType = dr["ProductType"].ToString(),
+                    Description = dr["Description"].ToString(),
+                    ModelType = dr["ModelType"].ToString(),
+                    CatalogDescription = dr["CatalogDescription"].ToString(),
+                    Culture = dr["Culture"].ToString()
+                   
+                });
+
+
+
+
+            }
+
+
+            return productView;
         }
     }
 }

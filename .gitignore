@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# cartella Migration
+.\Users\Betacom\Desktop\Project-Final-Betacom\Migrations\

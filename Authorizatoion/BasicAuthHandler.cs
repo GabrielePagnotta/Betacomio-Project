@@ -9,6 +9,7 @@ using System.Text;
 using System.Security.Cryptography;
 
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualBasic;
 
 namespace FirstMVC.Auth
 {
@@ -25,9 +26,7 @@ namespace FirstMVC.Auth
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            int counter = 0;
-            do
-            {
+           
                 Response.Headers.Add("WWW-Authenticate", "Basic"); //middleware, porre basic authorization sulle actions che richiedono protezione
 
                 if (!Request.Headers.ContainsKey("Authorization"))  //header della richiesta contiene chiavi di accesso
@@ -73,9 +72,11 @@ namespace FirstMVC.Auth
                 {
 
                     Console.WriteLine("errore nel metodo Autorization" + err.Message);
-                }
 
-            } while (true);
+                return Task.FromResult(AuthenticateResult.Fail(err));
+                }
+        
+            
 
 
         }
