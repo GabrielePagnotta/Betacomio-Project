@@ -36,17 +36,12 @@ namespace Betacomio_Project.Controllers
                 //    int? Phonw = user.Phone;
                 //    regex.checkNumOrDate(  Int32.Parse(birth) , Phonw.Value);
                 //}
-           
-
-
-
-
-
 
             }
 			catch (Exception err)
 			{
                 Console.WriteLine("Errore nel metodo di USnew : " + err.Message);
+               
 			}
 
         }
