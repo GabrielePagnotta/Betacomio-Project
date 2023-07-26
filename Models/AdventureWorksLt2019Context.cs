@@ -48,9 +48,7 @@ public partial class AdventureWorksLt2019Context : DbContext
 
     public virtual DbSet<VProductModelCatalogDescription> VProductModelCatalogDescriptions { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=AdventureWorksLT2019;Trusted_Connection=True;TrustServerCertificate=True;");
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -123,9 +121,8 @@ public partial class AdventureWorksLt2019Context : DbContext
 
         modelBuilder.Entity<AdminUsersRegistry>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToView("Admin_UsersRegistry");
+            entity.HasKey(e => e.CustomerId);
+
 
             entity.Property(e => e.AddressId).HasColumnName("AddressID");
             entity.Property(e => e.AddressLine1).HasMaxLength(60);
@@ -627,9 +624,7 @@ public partial class AdventureWorksLt2019Context : DbContext
 
         modelBuilder.Entity<UserProductsView>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToView("User_ProductsView");
+            entity.HasKey(e => e.Name);
 
             entity.Property(e => e.Color).HasMaxLength(15);
             entity.Property(e => e.Culture)

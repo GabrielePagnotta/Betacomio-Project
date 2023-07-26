@@ -91,6 +91,8 @@ namespace Betacomio_Project.Controllers
           }
             InsertUS insertUS = new InsertUS();
             insertUS.Usnew(user);
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
             return Ok();
             //_context.Users.Add(user);
             //await _context.SaveChangesAsync();
