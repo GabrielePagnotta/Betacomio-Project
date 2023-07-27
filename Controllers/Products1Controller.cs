@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Betacomio_Project.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Betacomio_Project.Controllers
 {
+    [Authorize("BasicAuthentication")]
     [Route("api/[controller]")]
     [ApiController]
     public class Products1Controller : ControllerBase
@@ -24,6 +26,8 @@ namespace Betacomio_Project.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
+          Classprova classprova = new Classprova();
+            classprova.MyMethod();
           if (_context.Products == null)
           {
               return NotFound();

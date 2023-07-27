@@ -16,6 +16,7 @@ namespace Betacomio_Project.Controllers
         {
 			try
 			{
+                
 				RegexCh regex = new RegexCh();
 				
 				if(regex.CheckUserEmail(user.Username , user.Email , user.Name , user.Surname) == true)
@@ -36,7 +37,7 @@ namespace Betacomio_Project.Controllers
                 //    int? Phonw = user.Phone;
                 //    regex.checkNumOrDate(  Int32.Parse(birth) , Phonw.Value);
                 //}
-
+                
             }
 			catch (Exception err)
 			{

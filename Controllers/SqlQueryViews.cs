@@ -262,5 +262,40 @@ namespace Betacomio_Project.Controllers
 
             return registryView;
         }
+
+        public bool CheckUsernameAndPassword(string username)
+        {
+            bool hasUser = false;
+            try
+            {
+                SqlCommand sql = conn.CreateCommand();
+                
+                sql.CommandType = System.Data.CommandType.StoredProcedure;
+                sql.CommandText = "CheckUsernameAndPassword";
+                sql.Parameters.AddWithValue("@username", username);
+              
+                SqlDataReader dataReader = sql.ExecuteReader();
+                if (dataReader.HasRows)
+                {
+                    Console.WriteLine("elemento trovato");
+                    hasUser = true;
+                }
+                else
+                {
+                    throw new Exception("nessun user trovato controlla i parametri inseriti ");
+                }
+
+
+
+            }
+            catch (Exception err)
+            {
+
+                Console.WriteLine("errore nel metodo di controllo ìnserimento Usename e Password : " + err.Message);
+               
+            }
+
+            return hasUser = false;
+        }
     }
 }
