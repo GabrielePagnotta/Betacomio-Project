@@ -6,6 +6,9 @@ namespace Betacomio_Project.Models;
 
 public partial class AdventureWorksLt2019Context : DbContext
 {
+    public AdventureWorksLt2019Context()
+    {
+    }
 
     public AdventureWorksLt2019Context(DbContextOptions<AdventureWorksLt2019Context> options)
         : base(options)
@@ -48,7 +51,9 @@ public partial class AdventureWorksLt2019Context : DbContext
 
     public virtual DbSet<VProductModelCatalogDescription> VProductModelCatalogDescriptions { get; set; }
 
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=AdventureWorksLT2019;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -97,8 +102,9 @@ public partial class AdventureWorksLt2019Context : DbContext
 
         modelBuilder.Entity<AdminProductsView>(entity =>
         {
-            entity.HasKey(e => e.ProductId);
-
+            entity
+                .HasNoKey()
+                .ToView("Admin_ProductsView");
 
             entity.Property(e => e.CatalogDescription).HasColumnType("xml");
             entity.Property(e => e.Color).HasMaxLength(15);
@@ -121,8 +127,9 @@ public partial class AdventureWorksLt2019Context : DbContext
 
         modelBuilder.Entity<AdminUsersRegistry>(entity =>
         {
-            entity.HasKey(e => e.CustomerId);
-
+            entity
+                .HasNoKey()
+                .ToView("Admin_UsersRegistry");
 
             entity.Property(e => e.AddressId).HasColumnName("AddressID");
             entity.Property(e => e.AddressLine1).HasMaxLength(60);
@@ -462,7 +469,8 @@ public partial class AdventureWorksLt2019Context : DbContext
 
             entity.HasOne(d => d.ProductDescription).WithMany(p => p.ProductModelProductDescriptions)
                 .HasForeignKey(d => d.ProductDescriptionId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ProductModelProductDescription_ProductDescription");
 
             entity.HasOne(d => d.ProductModel).WithMany(p => p.ProductModelProductDescriptions)
                 .HasForeignKey(d => d.ProductModelId)
@@ -624,7 +632,9 @@ public partial class AdventureWorksLt2019Context : DbContext
 
         modelBuilder.Entity<UserProductsView>(entity =>
         {
-            entity.HasKey(e => e.Name);
+            entity
+                .HasNoKey()
+                .ToView("User_ProductsView");
 
             entity.Property(e => e.Color).HasMaxLength(15);
             entity.Property(e => e.Culture)

@@ -21,6 +21,9 @@ builder.Services.AddDbContext<AdventureWorksLt2019Context>(option=>option.UseSql
 
 builder.Services.AddDbContext<UserRegistryContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("UserRegistry")));
 
+builder.Services.AddDbContext<Prova11Context>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("Prova11")));
+
+
 builder.Services.AddControllers().AddJsonOptions(jsopt => jsopt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 
