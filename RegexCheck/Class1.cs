@@ -1,5 +1,4 @@
-﻿using Betacomio_Project.ConnectDb;
-using Betacomio_Project.Models;
+﻿using Betacomio_Project.Models;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using NuGet.Protocol.Plugins;
@@ -13,33 +12,28 @@ namespace RegexCheck
 {
     public class RegexCh
     {
-        private readonly SingleTonConnectDB _connect;
-
-        SqlConnection conn = new SqlConnection();
-
-        public bool ConnectDb()
+        SqlConnection sqlConnection = new SqlConnection();
+        
+        public void connectDB()
         {
-            bool Isok = false;
             try
             {
-                if (conn.State == System.Data.ConnectionState.Closed)
+                if (sqlConnection.State == System.Data.ConnectionState.Closed)
                 {
-                    conn.ConnectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=UserRegistry;Integrated Security=True;TrustServerCertificate=True";
-                    conn.Open();
-                    return Isok = true;
+                    sqlConnection.ConnectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=UserRegistry;Integrated Security=True;TrustServerCertificate=True";
+                    sqlConnection.Open();
+               
 
                 }
 
             }
             catch (Exception ex)
             {
-
+               
                 Console.WriteLine($"si è verificato un errore : {ex.Message}");
-
             }
-            return Isok = false;
-        }
 
+        }
         #region CheckEmail
         public bool CheckUserEmail(string user, string email, string name, string surname)
         {
@@ -206,10 +200,8 @@ namespace RegexCheck
             bool hasUser = false;
             try
             {
-
-                ConnectDb();
-               
-                SqlCommand sql =  conn.CreateCommand();
+                connectDB();
+                SqlCommand sql = sqlConnection.CreateCommand();
                 sql.CommandType = System.Data.CommandType.StoredProcedure;
                 sql.CommandText = "CheckUsernameAndPassword";
                 sql.Parameters.AddWithValue("@username", username);
@@ -269,7 +261,6 @@ namespace RegexCheck
 
         }
 
-#region convert pass login
         public string[] convertInsertCredential(string autorization)
         {
             string[] arr = autorization.Split(" ");
@@ -280,24 +271,6 @@ namespace RegexCheck
             string[] users = { UsernamePas.Substring(0, separatoreIndex), UsernamePas.Substring(separatoreIndex + 1) };
             return users;
          }
-#endregion
-
-
-        //controllo se username o email inserita è già dentro il nostro db
-
-        public void checkUsername(SingleTonConnectDB connession , User user)
-        {
-            string connection = connession.ConnectDb();
-         using(SqlConnection sql = new SqlConnection(connection))
-            {
-                string username = user.Username;
-                SqlCommand sqlCommand = sql.CreateCommand();
-                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                sqlCommand.CommandText = "CheckUsername";
-              
-
-            }
-        }
     }
-
+    
 }

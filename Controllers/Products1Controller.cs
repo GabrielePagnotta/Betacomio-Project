@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Betacomio_Project.Models;
 using Microsoft.AspNetCore.Authorization;
-using Betacomio_Project.ConnectDb;
-using System.Data.SqlClient;
 
 namespace Betacomio_Project.Controllers
 {
@@ -17,15 +15,11 @@ namespace Betacomio_Project.Controllers
     [ApiController]
     public class Products1Controller : ControllerBase
     {
-        SqlConnection connection = new SqlConnection();
         private readonly AdventureWorksLt2019Context _context;
-        private readonly LoginUser _login;
-        private readonly SingleTonConnectDB _connession;
-        public Products1Controller(AdventureWorksLt2019Context context, LoginUser login, SingleTonConnectDB connession)
+
+        public Products1Controller(AdventureWorksLt2019Context context)
         {
             _context = context;
-            _login = login;
-            _connession = connession;
         }
 
         // GET: api/Products1
@@ -38,10 +32,7 @@ namespace Betacomio_Project.Controllers
           {
               return NotFound();
           }
-           
-                return await _context.Products.Take(1).Include(cat => cat.ProductCategory).Include(prod => prod.ProductModel).ThenInclude(proAnn => proAnn.ProductModelProductDescriptions).ThenInclude(descr => descr.ProductDescription).ToListAsync();
-          
-            return BadRequest(404);
+            return await _context.Products.Take(1).Include(cat => cat.ProductCategory).Include(prod => prod.ProductModel).ThenInclude(proAnn => proAnn.ProductModelProductDescriptions).ThenInclude(descr => descr.ProductDescription).ToListAsync();
         }
 
 
