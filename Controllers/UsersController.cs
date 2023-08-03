@@ -6,29 +6,47 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Betacomio_Project.Models;
+using Betacomio_Project.ConnectDb;
+using Microsoft.AspNetCore.Authorization;
+using RegexCheck;
 
 namespace Betacomio_Project.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
         private readonly UserRegistryContext _context;
-
-        public UsersController(UserRegistryContext context)
+        private readonly SingleTonConnectDB _connession;
+        public UsersController(UserRegistryContext context , SingleTonConnectDB connession)
         {
             _context = context;
+            _connession = connession;
         }
 
         // GET: api/Users
+       
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-          if (_context.Users == null)
-          {
-              return NotFound();
-          }
-            return await _context.Users.ToListAsync();
+            try
+            {
+                if (_context.Users == null)
+                {
+                    return NotFound();
+                }
+                _connession.ConnectDb();
+                return await _context.Users.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine("Errore nel metodo Get Users " + ex.Message);
+                return BadRequest(ex.Message);
+            }
+        
+         
         }
 
         // GET: api/Users/5
@@ -83,14 +101,17 @@ namespace Betacomio_Project.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<User>> PostUser(User user )
         {
           if (_context.Users == null)
           {
               return Problem("Entity set 'UserRegistryContext.Users'  is null.");
           }
             InsertUS insertUS = new InsertUS();
+            RegexCh regexCh = new RegexCh();
+            regexCh.checkUsername(_connession , user);
             insertUS.Usnew(user);
+            
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return Ok();

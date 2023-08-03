@@ -12,11 +12,14 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 using Betacomio_Project.Controllers;
 using RegexCheck;
+using Betacomio_Project.ConnectDb;
+
 namespace FirstMVC.Auth
 {
     public class BasicAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
         public RegexCh regexCh = new RegexCh();
+       
         public BasicAuthHandler(
             IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger,
@@ -30,7 +33,7 @@ namespace FirstMVC.Auth
         {
               
                 Response.Headers.Add("WWW-Authenticate", "Basic"); //middleware, porre basic authorization sulle actions che richiedono protezione
-
+                
                 if (!Request.Headers.ContainsKey("Authorization"))  //header della richiesta contiene chiavi di accesso
                 {
                     return Task.FromResult(AuthenticateResult.Fail("Autorizzazione mancante")); //esci dal modulo
@@ -40,23 +43,24 @@ namespace FirstMVC.Auth
                 string[] credential = regexCh.convertInsertCredential(authorizationHeader);
                 try
                 {
-  
+                
                 string[] passUSer  = regexCh.CheckUsernameAndPassword(credential[0]);
                 regexCh.CheckLogin(credential[1], passUSer[0] , passUSer[1].ToString() );
 
-                if (passUSer[0] == null)
-                {
-                       
-                        return  Task.FromResult(AuthenticateResult.Fail( new Exception("User e/o password errati !!!")));
-                }
-                else
+                if (regexCh.CheckLogin(credential[1], passUSer[0], passUSer[1].ToString()) == true)
                 {
                     Console.WriteLine("user corretta");
                     var authenticatedUser = new AuthUser("BasicAuthentication", true, credential[0]);
 
                     var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(authenticatedUser)); //viene creata una chiave per accedere
-
+                    LoginUser loginUser = new LoginUser();
                     return Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(claimsPrincipal, Scheme.Name)));
+
+                }
+                else
+                {
+               
+                    return Task.FromResult(AuthenticateResult.Fail(new Exception("User e/o password errati !!!")));
                 }
 
                    

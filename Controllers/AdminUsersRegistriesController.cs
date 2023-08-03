@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Betacomio_Project.Models;
+using Betacomio_Project.ConnectDb;
 
 namespace Betacomio_Project.Controllers
 {
@@ -14,12 +15,15 @@ namespace Betacomio_Project.Controllers
     public class AdminUsersRegistriesController : ControllerBase
     {
         private readonly AdventureWorksLt2019Context _context;
-
+        private readonly LoginUser _login;
+        private readonly SingleTonConnectDB _connession;
         SqlQueryViews registry = new();
 
-        public AdminUsersRegistriesController(AdventureWorksLt2019Context context)
+        public AdminUsersRegistriesController(AdventureWorksLt2019Context context , LoginUser login , SingleTonConnectDB connession)
         {
             _context = context;
+            _login = login;
+            _connession = connession;
         }
 
         // GET: api/AdminUsersRegistries
@@ -30,8 +34,11 @@ namespace Betacomio_Project.Controllers
           {
               return NotFound();
           }
-            return registry.UserRegistryV();
-                // await _context.AdminUsersRegistries.ToListAsync();
+           
+                return registry.UserRegistryV();
+            
+            return BadRequest(404);
+            // await _context.AdminUsersRegistries.ToListAsync();
         }
 
         // GET: api/AdminUsersRegistries/5

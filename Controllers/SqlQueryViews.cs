@@ -14,21 +14,7 @@ namespace Betacomio_Project.Controllers
 
         public SqlQueryViews() 
         {
-            try
-            {
-                if(conn.State==System.Data.ConnectionState.Closed)
-                {
-                    conn.ConnectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=AdventureWorksLT2019;Integrated Security=True;TrustServerCertificate=True";
-                    conn.Open();
-                    IsDok = true;
-
-                }
-
-            }catch (Exception ex) 
-            {
-                IsDok=false;
-                Console.WriteLine($"si è verificato un errore : {ex.Message}");
-            }
+          
         }
        // private string GetRowDetail(DataRow row)
        // {
