@@ -21,8 +21,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AdventureWorksLt2019Context>(option=>option.UseSqlServer(builder.Configuration.GetConnectionString("AdventureWorksLT2019")));
 
 builder.Services.AddDbContext<UserRegistryContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("UserRegistry")));
+<<<<<<< HEAD
 var strinConn = builder.Configuration.GetConnectionString("UserRegistry");
 builder.Services.AddSingleton<SingleTonConnectDB>(option => new SingleTonConnectDB(strinConn));
+=======
+
+builder.Services.AddDbContext<Prova11Context>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("Prova11")));
+
+
+>>>>>>> 04be643c260dbab37daa6b17072d5b25e88d6efe
 builder.Services.AddControllers().AddJsonOptions(jsopt => jsopt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddScoped<LoginUser>(); //implemento la classe login nel Product
 
