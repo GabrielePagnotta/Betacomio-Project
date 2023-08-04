@@ -18,25 +18,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //Db connection service
-builder.Services.AddDbContext<AdventureWorksLt2019Context>(option=>option.UseSqlServer(builder.Configuration.GetConnectionString("AdventureWorksLT2019")));
+builder.Services.AddDbContext<AdventureWorksLt2019Context>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("AdventureWorksLT2019")));
 
 builder.Services.AddDbContext<UserRegistryContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("UserRegistry")));
-<<<<<<< HEAD
 var strinConn = builder.Configuration.GetConnectionString("UserRegistry");
 builder.Services.AddSingleton<SingleTonConnectDB>(option => new SingleTonConnectDB(strinConn));
-=======
-
-builder.Services.AddDbContext<Prova11Context>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("Prova11")));
-
-
->>>>>>> 04be643c260dbab37daa6b17072d5b25e88d6efe
 builder.Services.AddControllers().AddJsonOptions(jsopt => jsopt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-builder.Services.AddScoped<LoginUser>(); //implemento la classe login nel Product
+
 
 builder.Services.AddAuthentication().AddScheme<AuthenticationSchemeOptions, BasicAuthHandler>("BasicAuth", opt => { });  //servizio di gestione autenticaizone
 
 builder.Services.AddAuthorization(opt => opt.AddPolicy("BasicAuthentication", new AuthorizationPolicyBuilder("BasicAuth").RequireAuthenticatedUser().Build()));  //policy autorizzazione per autenticazione
-builder.Services.AddCors(opt => { opt.AddDefaultPolicy(build => build.WithOrigins("http://localhost:4200", "https://localhost:7284").AllowAnyHeader().AllowAnyMethod().AllowCredentials() );});
+builder.Services.AddCors(opt => { opt.AddDefaultPolicy(build => build.WithOrigins("http://localhost:4200", "https://localhost:7284").AllowAnyHeader().AllowAnyMethod().AllowCredentials()); });
 
 builder.Services.AddDistributedMemoryCache(); //utilizzo del servizio della session
 

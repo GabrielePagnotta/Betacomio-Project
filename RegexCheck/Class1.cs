@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using NuGet.Protocol.Plugins;
+using Org.BouncyCastle.Utilities.Encoders;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
@@ -263,13 +264,25 @@ namespace RegexCheck
 
         public string[] convertInsertCredential(string autorization)
         {
-            string[] arr = autorization.Split(" ");
-            string UsernamePas = Encoding.UTF8.GetString(Convert.FromBase64String(arr[1]));
-            int separatoreIndex = UsernamePas.IndexOf(":");// indice di partenza
-            //string Username = UsernamePas.Substring(0, separatoreIndex);  //parto dalla posizione zero fino ad arrivare all'indice
-            //string passWord = UsernamePas.Substring(separatoreIndex + 1); //parto dall'indice +1
-            string[] users = { UsernamePas.Substring(0, separatoreIndex), UsernamePas.Substring(separatoreIndex + 1) };
-            return users;
+            try
+            {
+                string[] arr = autorization.Split(" ");
+                string UsernamePas = Encoding.UTF8.GetString(Convert.FromBase64String(arr[1]));
+                int separatoreIndex = UsernamePas.IndexOf(":");
+                // indice di partenza
+                //string Username = UsernamePas.Substring(0, separatoreIndex);  //parto dalla posizione zero fino ad arrivare all'indice
+                //string passWord = UsernamePas.Substring(separatoreIndex + 1); //parto dall'indice +1
+                string[] users = { UsernamePas.Substring(0, separatoreIndex), UsernamePas.Substring(separatoreIndex + 1) };
+                return users;
+            }
+            catch (Exception err)
+            {
+
+                Console.WriteLine("errore nel metodo ConvertInsertCredential" + err.Message);
+                return null;
+            }
+        
+            
          }
     }
     

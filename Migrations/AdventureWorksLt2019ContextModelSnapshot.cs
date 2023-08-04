@@ -98,6 +98,13 @@ namespace Betacomio_Project.Migrations
 
             modelBuilder.Entity("Betacomio_Project.Models.AdminProductsView", b =>
                 {
+                    b.Property<int>("ProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ProductID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
+
                     b.Property<string>("CatalogDescription")
                         .HasColumnType("xml");
 
@@ -132,10 +139,6 @@ namespace Betacomio_Project.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int")
-                        .HasColumnName("ProductID");
-
                     b.Property<string>("ProductNumber")
                         .IsRequired()
                         .HasMaxLength(25)
@@ -160,13 +163,20 @@ namespace Betacomio_Project.Migrations
                     b.Property<decimal?>("Weight")
                         .HasColumnType("decimal(8, 2)");
 
-                    b.ToTable((string)null);
+                    b.HasKey("ProductId");
 
-                    b.ToView("Admin_ProductsView", (string)null);
+                    b.ToTable("AdminProductsViews");
                 });
 
             modelBuilder.Entity("Betacomio_Project.Models.AdminUsersRegistry", b =>
                 {
+                    b.Property<int>("CustomerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("CustomerID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
+
                     b.Property<int>("AddressId")
                         .HasColumnType("int")
                         .HasColumnName("AddressID");
@@ -189,10 +199,6 @@ namespace Betacomio_Project.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int")
-                        .HasColumnName("CustomerID");
 
                     b.Property<string>("EmailAddress")
                         .HasMaxLength(50)
@@ -229,9 +235,9 @@ namespace Betacomio_Project.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.ToTable((string)null);
+                    b.HasKey("CustomerId");
 
-                    b.ToView("Admin_UsersRegistry", (string)null);
+                    b.ToTable("AdminUsersRegistries");
                 });
 
             modelBuilder.Entity("Betacomio_Project.Models.BuildVersion", b =>
@@ -979,6 +985,10 @@ namespace Betacomio_Project.Migrations
 
             modelBuilder.Entity("Betacomio_Project.Models.UserProductsView", b =>
                 {
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("Color")
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
@@ -1002,11 +1012,6 @@ namespace Betacomio_Project.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("ProductType")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -1022,9 +1027,9 @@ namespace Betacomio_Project.Migrations
                     b.Property<decimal?>("Weight")
                         .HasColumnType("decimal(8, 2)");
 
-                    b.ToTable((string)null);
+                    b.HasKey("Name");
 
-                    b.ToView("User_ProductsView", (string)null);
+                    b.ToTable("UserProductsViews");
                 });
 
             modelBuilder.Entity("Betacomio_Project.Models.VGetAllCategory", b =>

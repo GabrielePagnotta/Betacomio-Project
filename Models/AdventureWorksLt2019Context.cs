@@ -103,8 +103,7 @@ public partial class AdventureWorksLt2019Context : DbContext
         modelBuilder.Entity<AdminProductsView>(entity =>
         {
             entity
-                .HasNoKey()
-                .ToView("Admin_ProductsView");
+              .HasKey(e => e.ProductId);
 
             entity.Property(e => e.CatalogDescription).HasColumnType("xml");
             entity.Property(e => e.Color).HasMaxLength(15);
@@ -128,8 +127,7 @@ public partial class AdventureWorksLt2019Context : DbContext
         modelBuilder.Entity<AdminUsersRegistry>(entity =>
         {
             entity
-                .HasNoKey()
-                .ToView("Admin_UsersRegistry");
+              .HasKey(e => e.CustomerId);
 
             entity.Property(e => e.AddressId).HasColumnName("AddressID");
             entity.Property(e => e.AddressLine1).HasMaxLength(60);
@@ -633,8 +631,7 @@ public partial class AdventureWorksLt2019Context : DbContext
         modelBuilder.Entity<UserProductsView>(entity =>
         {
             entity
-                .HasNoKey()
-                .ToView("User_ProductsView");
+               .HasKey(e => e.Name);
 
             entity.Property(e => e.Color).HasMaxLength(15);
             entity.Property(e => e.Culture)
