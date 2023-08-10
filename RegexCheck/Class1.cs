@@ -1,6 +1,8 @@
-﻿using Betacomio_Project.Models;
+﻿using Betacomio_Project.ConnectDb;
+using Betacomio_Project.Models;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.IdentityModel.Tokens;
 using NuGet.Protocol.Plugins;
 using Org.BouncyCastle.Utilities.Encoders;
 using System.Data.SqlClient;
@@ -15,13 +17,13 @@ namespace RegexCheck
     {
         SqlConnection sqlConnection = new SqlConnection();
         
-        public void connectDB()
+        public void connectDB(string connection)
         {
             try
             {
                 if (sqlConnection.State == System.Data.ConnectionState.Closed)
                 {
-                    sqlConnection.ConnectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=UserRegistry;Integrated Security=True;TrustServerCertificate=True";
+                    sqlConnection.ConnectionString = connection;
                     sqlConnection.Open();
                
 
@@ -196,12 +198,12 @@ namespace RegexCheck
             return true;
         }
 
-        public string[] CheckUsernameAndPassword(string username)
+        public string[] CheckUsernameAndPassword(string username , SingleTonConnectDB connession)
         {
             bool hasUser = false;
             try
             {
-                connectDB();
+                connectDB(connession.ConnectDb());
                 SqlCommand sql = sqlConnection.CreateCommand();
                 sql.CommandType = System.Data.CommandType.StoredProcedure;
                 sql.CommandText = "CheckUsernameAndPassword";
@@ -284,6 +286,48 @@ namespace RegexCheck
         
             
          }
+
+         #region metodo che controlla che in fase di registrazione l'utente non esista
+        public bool Checkusername(SingleTonConnectDB connession , string username , string email) //ricerca se username o email sono le stesse
+        {
+            try
+            {
+                bool isOk = true;
+                connectDB(connession.ConnectDb());
+                
+                SqlCommand sql = sqlConnection.CreateCommand();
+                sql.CommandType = System.Data.CommandType.StoredProcedure;
+                sql.CommandText = "CheckUsername";
+                if (username.IsNullOrEmpty() | email.IsNullOrEmpty())
+                {
+                    throw new Exception("il campo inserito è vuoto o nullo ");
+                }
+                // stiamo accedendo a dei dati del db e quindi dobbiamo convertire la nostra variabile nel tipo specificato
+                //System.Data.SqlDbType.NVarChar).Value = username;
+                sql.Parameters.AddWithValue("@username" , username);
+                sql.Parameters.AddWithValue("@email", email);
+                SqlDataReader sqlData = sql.ExecuteReader();
+                if (sqlData.HasRows) { isOk = true; throw new Exception("Il nome utente o email sono già presenti del nostro DataBase");  }
+                return isOk = false;
+            }
+            catch (Exception err)
+            {
+
+                throw new Exception("Errore nel metodo checkUsername" + err.Message);
+            }
+         
+
+
+
+
+
+
+
+
+
+            return true;
+        }
+        #endregion //
     }
-    
+
 }

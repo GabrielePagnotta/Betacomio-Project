@@ -12,11 +12,14 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 using Betacomio_Project.Controllers;
 using RegexCheck;
+using Betacomio_Project.ConnectDb;
+
 namespace FirstMVC.Auth
 {
     public class BasicAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
         public RegexCh regexCh = new RegexCh();
+        private readonly SingleTonConnectDB _connession;
         public BasicAuthHandler(
             IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger,
@@ -40,8 +43,8 @@ namespace FirstMVC.Auth
                 string[] credential = regexCh.convertInsertCredential(authorizationHeader);
                 try
                 {
-  
-                string[] passUSer  = regexCh.CheckUsernameAndPassword(credential[0]);
+                
+                string[] passUSer  = regexCh.CheckUsernameAndPassword(credential[0], _connession );
                 regexCh.CheckLogin(credential[1], passUSer[0] , passUSer[1].ToString() );
 
                 if (passUSer[0] == null)

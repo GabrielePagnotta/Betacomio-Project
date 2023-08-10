@@ -18,7 +18,7 @@ namespace Betacomio_Project.Controllers
 			{
                 
 				RegexCh regex = new RegexCh();
-				
+                
 				if(regex.CheckUserEmail(user.Username , user.Email , user.Name , user.Surname) == true)
                 {} else { throw new Exception("email o username non valido "); };
                 if (user.PasswordHash.IsNullOrEmpty()) { throw new Exception("Il Campo Password non può essere Null o Vuoto");}

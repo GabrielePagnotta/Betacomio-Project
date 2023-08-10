@@ -6,21 +6,29 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Betacomio_Project.Models;
+using Betacomio_Project.ConnectDb;
+using System.Text.RegularExpressions;
+using RegexCheck;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Betacomio_Project.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
         private readonly UserRegistryContext _context;
+        private readonly SingleTonConnectDB _connession;
 
-        public UsersController(UserRegistryContext context)
+        public UsersController(UserRegistryContext context , SingleTonConnectDB connession)
         {
             _context = context;
+            _connession = connession;
         }
 
         // GET: api/Users
+        [Authorize("BasicAuthentication")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
@@ -82,6 +90,7 @@ namespace Betacomio_Project.Controllers
 
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+       
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
@@ -89,6 +98,10 @@ namespace Betacomio_Project.Controllers
           {
               return Problem("Entity set 'UserRegistryContext.Users'  is null.");
           }
+            RegexCh regex = new RegexCh();
+            bool existUser = regex.Checkusername(_connession, user.Username, user.Email);
+            if (existUser == true){ return BadRequest(404); }
+          
             InsertUS insertUS = new InsertUS();
             insertUS.Usnew(user);
             _context.Users.Add(user);
