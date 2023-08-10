@@ -15,8 +15,6 @@ namespace Betacomio_Project.Controllers
     {
         private readonly AdventureWorksLt2019Context _context;
 
-        SqlQueryViews registry = new();
-
         public AdminUsersRegistriesController(AdventureWorksLt2019Context context)
         {
             _context = context;
@@ -30,8 +28,7 @@ namespace Betacomio_Project.Controllers
           {
               return NotFound();
           }
-            return registry.UserRegistryV();
-                // await _context.AdminUsersRegistries.ToListAsync();
+            return await _context.AdminUsersRegistries.ToListAsync();
         }
 
         // GET: api/AdminUsersRegistries/5

@@ -1,6 +1,7 @@
 using Betacomio_Project.ConnectDb;
 using Betacomio_Project.Controllers;
 using Betacomio_Project.Models;
+using Betacomio_Project.NewModels;
 using FirstMVC.Auth;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -20,7 +21,8 @@ builder.Services.AddSwaggerGen();
 //Db connection service
 builder.Services.AddDbContext<AdventureWorksLt2019Context>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("AdventureWorksLT2019")));
 
-builder.Services.AddDbContext<UserRegistryContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("UserRegistry")));
+//DB CONTEXT DEFINITIVO
+builder.Services.AddDbContext<BetacomioCyclesContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("BetacomioCycles"))); 
 var strinConn = builder.Configuration.GetConnectionString("UserRegistry");
 builder.Services.AddSingleton<SingleTonConnectDB>(option => new SingleTonConnectDB(strinConn));
 builder.Services.AddControllers().AddJsonOptions(jsopt => jsopt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);

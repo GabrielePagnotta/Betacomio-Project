@@ -1,6 +1,7 @@
 ﻿
 
 using Betacomio_Project.Models;
+using Betacomio_Project.NewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.Data.SqlClient;
 using System.Data;
@@ -104,11 +105,11 @@ namespace Betacomio_Project.Controllers
         /// Visualizzazione di tutti i prodotti per Admin
         /// </summary>
         /// <returns></returns>
-        public List<AdminProductsView> AdminProductsV()
+        public List<ViewAdminProduct> AdminProductsV()
         {
-            List<AdminProductsView> adminView = new();
+            List<ViewAdminProduct> adminView = new();
             SqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "SELECT * FROM Admin_ProductsView";
+            cmd.CommandText = "SELECT * FROM View_AdminProducts";
 
             decimal decimalValue;
 
@@ -126,7 +127,7 @@ namespace Betacomio_Project.Controllers
 
                     }
 
-                    adminView.Add(new AdminProductsView
+                    adminView.Add(new ViewAdminProduct
                     {
                         ProductId = (int)dr["ProductId"],
                         Name = dr["Name"].ToString(),
@@ -162,11 +163,11 @@ namespace Betacomio_Project.Controllers
         /// Visualizzazione di tutti i prodotti per User
         /// </summary>
         /// <returns></returns>
-        public List<UserProductsView> UserProductsV()
+        public List<ViewUserProduct> UserProductsV()
         {
-            List<UserProductsView> userView = new();
+            List<ViewUserProduct> userView = new();
             SqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "SELECT * FROM User_ProductsView";
+            cmd.CommandText = "SELECT * FROM View_UserProducts";
 
             decimal decimalValue;
 
@@ -184,7 +185,7 @@ namespace Betacomio_Project.Controllers
 
                     }
 
-                    userView.Add(new UserProductsView
+                    userView.Add(new ViewUserProduct
                     {
                         Name = dr["Name"].ToString(),
                         Color = dr["color"].ToString(),
@@ -210,45 +211,32 @@ namespace Betacomio_Project.Controllers
         }
 
 
-        public List<AdminUsersRegistry> UserRegistryV()
+        public List<ViewAdminUserRegistry> UserRegistryV()
         {
-            List<AdminUsersRegistry> registryView = new();
+            List<ViewAdminUserRegistry> registryView = new();
             SqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "SELECT * FROM Admin_UserRegistry";
-
-            Guid rowguid;
+            cmd.CommandText = "SELECT * FROM View_Admin_UserRegistry";
 
             using (SqlDataReader dr = cmd.ExecuteReader())
             {
                 while (dr.Read())
                 {
-                    if (DBNull.Value.Equals(dr["Rowguid"]))
-                    {
-                        rowguid = Guid.Empty;
-                    }
-                    else
-                    {
-                        rowguid = dr.GetGuid(dr.GetOrdinal("Rowguid"));
 
-                    }
-
-
-                    registryView.Add(new AdminUsersRegistry
+                    registryView.Add(new ViewAdminUserRegistry
                     {
-                        CustomerId = Convert.ToInt16(dr["CustomerId"]),
-                        FirstName = dr["FirstName"].ToString(),
-                        LastName = dr["LastName"].ToString(),
-                        EmailAddress = dr["EmailAddress"].ToString(),
+                        UserId = Convert.ToInt16(dr["UserId"]),
+                        Name = dr["Name"].ToString(),
+                        Surname = dr["Surname"].ToString(),
+                        Email = dr["Email"].ToString(),
                         Phone = dr["Phone"].ToString(),
                         AddressId = Convert.ToInt16(dr["AddressId"]),
-                        AddressLine1 = dr["AddressLine1"].ToString(),
-                        AddressLine2 = dr["AddressLine2"].ToString(),
+                        Address = dr["Address"].ToString(),
+                        AddressDetail = dr["AddressDetail"].ToString(),
                         City = dr["City"].ToString(),
-                        StateProvince = dr["StateProvince"].ToString(),
-                        CountryRegion = dr["CountryRegion"].ToString(),
+                        Region = dr["Region"].ToString(),
+                        Country = dr["Country"].ToString(),
                         PostalCode = dr["PostalCode"].ToString(),
-                        ModifiedDate = Convert.ToDateTime(dr["ModelType"]),
-                        Rowguid = rowguid
+                        ModifiedDate = Convert.ToDateTime(dr["ModelType"])
 
                     });
 
