@@ -15,8 +15,6 @@ namespace Betacomio_Project.Controllers
     {
         private readonly AdventureWorksLt2019Context _context;
 
-        SqlQueryViews user = new();
-
         public UserProductsViewsController(AdventureWorksLt2019Context context)
         {
             _context = context;
@@ -30,8 +28,7 @@ namespace Betacomio_Project.Controllers
           {
               return NotFound();
           }
-            return user.UserProductsV();
-                   //await _context.UserProductsViews.ToListAsync();
+            return await _context.UserProductsViews.ToListAsync();
         }
 
         // GET: api/UserProductsViews/5
