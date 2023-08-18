@@ -34,7 +34,7 @@ namespace Betacomio_Project.Controllers
             {
                 return NotFound();
             }
-            var userProduct = await _context.ViewUserProducts.Where(val => val.Name.ToLower().Contains(name)).FirstAsync();
+            var userProduct = await _context.ViewUserProducts.Where(val => val.Name == name).FirstAsync();
 
             if (userProduct == null)
             {
