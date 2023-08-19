@@ -1,4 +1,4 @@
-﻿using Betacomio_Project.Models;
+﻿
 using Betacomio_Project.NewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,13 +28,13 @@ namespace Betacomio_Project.Controllers
         }
 
         [HttpGet("{name}")]
-        public async Task<ActionResult<ViewUserProduct>> GetUserProductsByID(string name)
+        public async Task<ActionResult<List<ViewUserProduct>>> GetUserProductsByID(string name)
         {
             if (_context.ViewUserProducts == null)
             {
                 return NotFound();
             }
-            var userProduct = await _context.ViewUserProducts.Where(val => val.Name.ToLower().Contains(name)).FirstAsync();
+            var userProduct = await _context.ViewUserProducts.Where(val => val.Name.ToLower().Contains(name)).ToListAsync();
 
             if (userProduct == null)
             {

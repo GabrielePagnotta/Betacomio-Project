@@ -5,31 +5,25 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
-using Betacomio_Project.ConnectDb;
-using System.Text.RegularExpressions;
-using RegexCheck;
-using Microsoft.AspNetCore.Authorization;
 using Betacomio_Project.NewModels;
+using RegexCheck;
+using Betacomio_Project.ConnectDb;
 
 namespace Betacomio_Project.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class Users1Controller : ControllerBase
     {
         private readonly BetacomioCyclesContext _context;
         private readonly SingleTonConnectDB _connession;
-
-        public UsersController(BetacomioCyclesContext context , SingleTonConnectDB connession)
+        public Users1Controller(BetacomioCyclesContext context , SingleTonConnectDB connession)
         {
             _context = context;
             _connession = connession;
         }
 
-        // GET: api/Users
-        [Authorize("BasicAuthentication")]
+        // GET: api/Users1
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
@@ -40,7 +34,7 @@ namespace Betacomio_Project.Controllers
             return await _context.Users.ToListAsync();
         }
 
-        // GET: api/Users/5
+        // GET: api/Users1/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -58,7 +52,7 @@ namespace Betacomio_Project.Controllers
             return user;
         }
 
-        // PUT: api/Users/5
+        // PUT: api/Users1/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
@@ -89,32 +83,27 @@ namespace Betacomio_Project.Controllers
             return NoContent();
         }
 
-        // POST: api/Users
+        // POST: api/Users1
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-       
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
           if (_context.Users == null)
           {
-              return Problem("Entity set 'UserRegistryContext.Users'  is null.");
+              return Problem("Entity set 'BetacomioCyclesContext.Users'  is null.");
           }
             RegexCh regex = new RegexCh();
             bool existUser = regex.Checkusername(_connession, user.Username, user.Email);
-            if (existUser == true){ return BadRequest(404); }
-          
+            if (existUser == true) { return BadRequest(404); }
+
             InsertUS insertUS = new InsertUS();
             insertUS.Usnew(user);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return Ok();
-            //_context.Users.Add(user);
-            //await _context.SaveChangesAsync();
-
-            //return CreatedAtAction("GetUser", new { id = user.UserId }, user);
         }
 
-        // DELETE: api/Users/5
+        // DELETE: api/Users1/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {

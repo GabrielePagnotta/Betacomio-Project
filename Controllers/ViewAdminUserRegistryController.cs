@@ -1,4 +1,4 @@
-﻿using Betacomio_Project.Models;
+﻿
 using Betacomio_Project.NewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
