@@ -1,6 +1,7 @@
 using Betacomio_Project.ConnectDb;
 using Betacomio_Project.Controllers;
-
+using Betacomio_Project.LogModels;
+using Betacomio_Project.Models;
 using Betacomio_Project.NewModels;
 using FirstMVC.Auth;
 using Microsoft.AspNetCore.Authentication;
@@ -18,12 +19,18 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-//Db connection service
+
+//Db connection >> DB VECCHIO
+builder.Services.AddDbContext<AdventureWorksLt2019Context>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("AdventureWorksLT2019")));
+
+//DB PRINCIPALE
+builder.Services.AddDbContext<BetacomioCyclesContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("BetacomioCycles")));
+
+//DB ISOLATO (error log, tabelle isolate per prove) 
+builder.Services.AddDbContext<AdminLogContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("AdminLog")));
 
 
-//DB CONTEXT DEFINITIVO
-builder.Services.AddDbContext<BetacomioCyclesContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("BetacomioCycles"))); 
-var strinConn = builder.Configuration.GetConnectionString("BetacomioCycles");
+var strinConn = builder.Configuration.GetConnectionString("UserRegistry");
 builder.Services.AddSingleton<SingleTonConnectDB>(option => new SingleTonConnectDB(strinConn));
 builder.Services.AddControllers().AddJsonOptions(jsopt => jsopt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
