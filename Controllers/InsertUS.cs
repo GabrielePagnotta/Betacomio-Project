@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.ComponentModel;
 using Betacomio_Project.NewModels;
+using Betacomio_Project.LogModels;
 
 namespace Betacomio_Project.Controllers
 {
@@ -13,7 +14,7 @@ namespace Betacomio_Project.Controllers
     {
 
 
-        public void Usnew(User user)
+        public void Usnew(UserCredential user)
         {
 			try
 			{
@@ -30,7 +31,7 @@ namespace Betacomio_Project.Controllers
                     user.PasswordHash = PassSalt.Key;
                     user.PasswordSalt = PassSalt.Value;
 				}
-				else { new Exception("La password inserita non rispecchia i parametri di base almeno un carattere SPECIALE e NUMERI"); };
+				else { throw new Exception("La password inserita non rispecchia i parametri di base almeno un carattere SPECIALE e NUMERI"); };
                 user.BirthYear = null;
                 //if ( user.Phone != null)
                 //{

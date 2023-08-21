@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Betacomio_Project.LogModels;
+using Betacomio_Project.ConnectDb;
+using RegexCheck;
 
 namespace Betacomio_Project.Controllers
 {
@@ -14,10 +16,12 @@ namespace Betacomio_Project.Controllers
     public class UserCredentialsController : ControllerBase
     {
         private readonly AdminLogContext _context;
+        private readonly SingleTonConnectDB _connession;
 
-        public UserCredentialsController(AdminLogContext context)
+        public UserCredentialsController(AdminLogContext context , SingleTonConnectDB connession)
         {
             _context = context;
+            _connession = connession;
         }
 
         // GET: api/UserCredentials
@@ -85,14 +89,19 @@ namespace Betacomio_Project.Controllers
         [HttpPost]
         public async Task<ActionResult<UserCredential>> PostUserCredential(UserCredential userCredential)
         {
-          if (_context.UserCredentials == null)
-          {
-              return Problem("Entity set 'AdminLogContext.UserCredentials'  is null.");
-          }
+            if (_context.UserCredentials == null)
+            {
+                return Problem("Entity set 'UserRegistryContext.Users'  is null.");
+            }
+            RegexCh regex = new RegexCh();
+            bool existUser = regex.Checkusername( _connession, userCredential.Username, userCredential.Email);
+            if (existUser == true) { return BadRequest(404); }
+
+            InsertUS insertUS = new InsertUS();
+            insertUS.Usnew(userCredential);
             _context.UserCredentials.Add(userCredential);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUserCredential", new { id = userCredential.UserId }, userCredential);
+            return Ok();
         }
 
         // DELETE: api/UserCredentials/5

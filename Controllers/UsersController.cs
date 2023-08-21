@@ -92,27 +92,27 @@ namespace Betacomio_Project.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
        
-        [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
-        {
-          if (_context.Users == null)
-          {
-              return Problem("Entity set 'UserRegistryContext.Users'  is null.");
-          }
-            RegexCh regex = new RegexCh();
-            bool existUser = regex.Checkusername(_connession, user.Username, user.Email);
-            if (existUser == true){ return BadRequest(404); }
+        //[HttpPost]
+        //public async Task<ActionResult<User>> PostUser(User user)
+        //{
+        //  if (_context.Users == null)
+        //  {
+        //      return Problem("Entity set 'UserRegistryContext.Users'  is null.");
+        //  }
+        //    RegexCh regex = new RegexCh();
+        //    bool existUser = regex.Checkusername(_connession, user.Username, user.Email);
+        //    if (existUser == true){ return BadRequest(404); }
           
-            InsertUS insertUS = new InsertUS();
-            insertUS.Usnew(user);
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return Ok();
-            //_context.Users.Add(user);
-            //await _context.SaveChangesAsync();
+        //    InsertUS insertUS = new InsertUS();
+        //    insertUS.Usnew(user);
+        //    _context.Users.Add(user);
+        //    await _context.SaveChangesAsync();
+        //    return Ok();
+        //    //_context.Users.Add(user);
+        //    //await _context.SaveChangesAsync();
 
-            //return CreatedAtAction("GetUser", new { id = user.UserId }, user);
-        }
+        //    //return CreatedAtAction("GetUser", new { id = user.UserId }, user);
+        //}
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]

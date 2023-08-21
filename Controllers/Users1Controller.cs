@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Betacomio_Project.NewModels;
 using RegexCheck;
 using Betacomio_Project.ConnectDb;
+using Betacomio_Project.LogModels;
 
 namespace Betacomio_Project.Controllers
 {
@@ -85,23 +86,7 @@ namespace Betacomio_Project.Controllers
 
         // POST: api/Users1
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
-        {
-          if (_context.Users == null)
-          {
-              return Problem("Entity set 'BetacomioCyclesContext.Users'  is null.");
-          }
-            RegexCh regex = new RegexCh();
-            bool existUser = regex.Checkusername(_connession, user.Username, user.Email);
-            if (existUser == true) { return BadRequest(404); }
-
-            InsertUS insertUS = new InsertUS();
-            insertUS.Usnew(user);
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
+       
 
         // DELETE: api/Users1/5
         [HttpDelete("{id}")]

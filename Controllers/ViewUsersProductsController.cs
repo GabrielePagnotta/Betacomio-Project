@@ -28,7 +28,7 @@ namespace Betacomio_Project.Controllers
         }
 
         [HttpGet("{name}")]
-        public async Task<ActionResult<List<ViewUserProduct>>> GetUserProductsByID(string name)
+        public async Task<ActionResult<ViewUserProduct>> GetUserProductsByID(string name)
         {
             if (_context.ViewUserProducts == null)
             {
