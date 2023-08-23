@@ -10,12 +10,15 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using ImageConvertio;
+using System.Drawing;
 
 namespace RegexCheck
 {
     public class RegexCh
     {
         SqlConnection sqlConnection = new SqlConnection();
+        
         
         public void connectDB(string connection)
         {
@@ -335,7 +338,7 @@ namespace RegexCheck
 
             try
             {   
-                connectDB(connession.ConnectDb());
+                connectDB(connession.ConnectDb()); //necessario Singleton che si connetta a DB BetacomioCycles
                 SqlCommand sql = sqlConnection.CreateCommand();
                 sql.CommandType = System.Data.CommandType.StoredProcedure;
                 sql.CommandText = "ShowProductsLanguage";
@@ -370,7 +373,7 @@ namespace RegexCheck
                             Size = dr["Size"].ToString(),
                             Weight = decimalValue,
                             Description = dr["Description"].ToString(),
-                            ThumbnailPhoto = (byte[])(dr["ThumbnailPhoto"]),
+                            ThumbnailPhoto = ImgConverter.GetImageFromByteArray((byte[])dr["ThumbnailPhoto"]), //converto array di byte in bitmap
                             Culture = dr["Culture"].ToString()
 
                         });
@@ -387,6 +390,8 @@ namespace RegexCheck
 
             }
         }
+
+
     }
 
 }
