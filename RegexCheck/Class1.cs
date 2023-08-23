@@ -1,11 +1,11 @@
 ﻿using Betacomio_Project.ConnectDb;
-
+using Betacomio_Project.NewModels;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
 using NuGet.Protocol.Plugins;
 //using Org.BouncyCastle.Utilities.Encoders;
-using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -288,7 +288,7 @@ namespace RegexCheck
          }
 
          #region metodo che controlla che in fase di registrazione l'utente non esista
-        public bool Checkusername(SingleTonConnectDB connession , string username , string email) //ricerca se username o email sono le stesse
+        public bool Checkusername(SingleTonConnectDB connession, string username , string email) //ricerca se username o email sono le stesse
         {
             try
             {
@@ -315,19 +315,78 @@ namespace RegexCheck
 
                 throw new Exception("Errore nel metodo checkUsername" + err.Message);
             }
-         
-
-
-
-
-
-
-
-
 
             return true;
         }
         #endregion //
+
+
+        /// <summary>
+        /// Mostra prodotti di ciascuna lingua a seconda della nazionalità scelta dallo User
+        /// </summary>
+        /// <param name="connession"></param>
+        /// <param name="nationality"></param>
+        ///<returns> Lista di prodotti in lingua specifica </returns>
+        public async Task<IEnumerable<ViewUserProduct>> ProductsWithLanguage(SingleTonConnectDB connession , int nationality)
+        {
+            
+            List<ViewUserProduct> langProducts = new();
+            decimal decimalValue;
+
+            try
+            {   
+                connectDB(connession.ConnectDb());
+                SqlCommand sql = sqlConnection.CreateCommand();
+                sql.CommandType = System.Data.CommandType.StoredProcedure;
+                sql.CommandText = "ShowProductsLanguage";
+
+                //mostra prodotti della stessa lingua dell'utente (in base a Nationality)
+                sql.Parameters.AddWithValue("@userNationality", nationality);
+
+                //avvio dataReader per leggere record della view UserProducts
+                SqlDataReader dr = sql.ExecuteReader();
+
+                using (dr)
+                {
+                    while (await dr.ReadAsync())
+                    {
+
+                        if (DBNull.Value.Equals(dr["Weight"]))
+                        {
+                            decimalValue = 0;
+                        }
+                        else
+                        {
+                            decimalValue = (decimal)dr["Weight"];
+                        }
+
+                        langProducts.Add(new ViewUserProduct
+                        {
+                            Name = dr["Name"].ToString(),
+                            ProductType = dr["ProductType"].ToString(),
+                            ModelType = dr["ModelType"].ToString(),
+                            ListPrice = (decimal)dr["ListPrice"],
+                            Color = dr["Color"].ToString(),
+                            Size = dr["Size"].ToString(),
+                            Weight = decimalValue,
+                            Description = dr["Description"].ToString(),
+                            ThumbnailPhoto = (byte[])(dr["ThumbnailPhoto"]),
+                            Culture = dr["Culture"].ToString()
+
+                        });
+
+                        
+                    }
+                }
+
+               return langProducts;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore nel metodo ProductsWithLanguage: " + ex.Message);
+
+            }
+        }
     }
 
 }
