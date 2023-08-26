@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\**" />
+    <Content Remove="Migrations\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.7" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.10" />
@@ -19,17 +26,18 @@
     <PackageReference Include="NLog.Database" Version="5.2.2" />
     <PackageReference Include="Nlog.Extensions.Logging" Version="5.3.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="ImageConvertio">
+      <HintPath>..\..\ImageConvertio\bin\Debug\net7.0\ImageConvertio.dll</HintPath>
+    </Reference>
     <Reference Include="RegexCheck">
       <HintPath>RegexCheck\bin\Debug\net7.0\RegexCheck.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
     <Folder Include="NewModels\" />
   </ItemGroup>
 

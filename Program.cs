@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using RegexCheck;
 using System.Text.Json.Serialization;
 
 
@@ -29,9 +30,13 @@ builder.Services.AddDbContext<BetacomioCyclesContext>(option => option.UseSqlSer
 //DB ISOLATO (error log, tabelle isolate per prove) 
 builder.Services.AddDbContext<AdminLogContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("AdminLog")));
 
-
+//Servizio connessione al DB
 var strinConn = builder.Configuration.GetConnectionString("AdminLog");
 builder.Services.AddSingleton<SingleTonConnectDB>(option => new SingleTonConnectDB(strinConn));
+
+//Utilizzo RegexCh come servizio
+builder.Services.AddScoped<RegexCh>();
+
 builder.Services.AddControllers().AddJsonOptions(jsopt => jsopt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 
