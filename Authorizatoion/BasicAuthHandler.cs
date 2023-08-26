@@ -18,15 +18,19 @@ namespace FirstMVC.Auth
 {
     public class BasicAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
+
         public RegexCh regexCh = new RegexCh();
         private readonly SingleTonConnectDB _connession;
         public BasicAuthHandler(
             IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
-            ISystemClock clock)
+            ISystemClock clock,
+            SingleTonConnectDB connession
+            )
             : base(options, logger, encoder, clock)
         {
+            _connession = connession;
         }
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -58,7 +62,8 @@ namespace FirstMVC.Auth
                     var authenticatedUser = new AuthUser("BasicAuthentication", true, credential[0]);
 
                     var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(authenticatedUser)); //viene creata una chiave per accedere
-
+                   
+                    
                     return Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(claimsPrincipal, Scheme.Name)));
                 }
 

@@ -1,10 +1,12 @@
 ﻿
 using Betacomio_Project.NewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Betacomio_Project.Controllers
 {
+   
     [Route("api/[controller]")]
     [ApiController]
     public class ViewUserProductsController : ControllerBase

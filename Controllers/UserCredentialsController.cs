@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Betacomio_Project.LogModels;
 using Betacomio_Project.ConnectDb;
 using RegexCheck;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Betacomio_Project.Controllers
 {
+    [Authorize("BasicAuthentication")]
     [Route("api/[controller]")]
     [ApiController]
     public class UserCredentialsController : ControllerBase
