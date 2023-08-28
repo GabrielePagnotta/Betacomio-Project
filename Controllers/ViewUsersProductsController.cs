@@ -2,12 +2,14 @@
 using Betacomio_Project.ConnectDb;
 using Betacomio_Project.LogModels;
 using Betacomio_Project.NewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RegexCheck;
 
 namespace Betacomio_Project.Controllers
 {
+   
     [Route("api/[controller]")]
     [ApiController]
     public class ViewUserProductsController : ControllerBase

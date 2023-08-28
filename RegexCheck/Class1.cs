@@ -201,16 +201,18 @@ namespace RegexCheck
             return true;
         }
 
-        public string[] CheckUsernameAndPassword(string username , SingleTonConnectDB connession)
+        public string[] CheckUsernameAndPassword(string email , SingleTonConnectDB connession)
         {
             bool hasUser = false;
             try
             {
-                connectDB(connession.ConnectDb());
+                string connect = connession.ConnectDb();
+                Console.WriteLine(connect);
+                connectDB(connect);
                 SqlCommand sql = sqlConnection.CreateCommand();
                 sql.CommandType = System.Data.CommandType.StoredProcedure;
                 sql.CommandText = "CheckUsernameAndPassword";
-                sql.Parameters.AddWithValue("@username", username);
+                sql.Parameters.AddWithValue("@email", email);
                 
                 SqlDataReader dataReader = sql.ExecuteReader();
                 if (dataReader.HasRows)
