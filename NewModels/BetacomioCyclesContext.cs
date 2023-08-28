@@ -6,6 +6,9 @@ namespace Betacomio_Project.NewModels;
 
 public partial class BetacomioCyclesContext : DbContext
 {
+    public BetacomioCyclesContext()
+    {
+    }
 
     public BetacomioCyclesContext(DbContextOptions<BetacomioCyclesContext> options)
         : base(options)
@@ -46,7 +49,7 @@ public partial class BetacomioCyclesContext : DbContext
 
     public virtual DbSet<Wishlist> Wishlists { get; set; }
 
-   
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Address>(entity =>
@@ -80,6 +83,9 @@ public partial class BetacomioCyclesContext : DbContext
             entity.Property(e => e.Language)
                 .HasMaxLength(20)
                 .IsUnicode(false);
+            entity.Property(e => e.LanguageCode)
+                .HasMaxLength(6)
+                .IsFixedLength();
         });
 
         modelBuilder.Entity<OrderDetail>(entity =>
@@ -311,7 +317,7 @@ public partial class BetacomioCyclesContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("Password_Hash");
             entity.Property(e => e.PasswordSalt)
-                .HasMaxLength(10)
+                .HasMaxLength(128)
                 .IsUnicode(false)
                 .HasColumnName("Password_Salt");
             entity.Property(e => e.Phone).HasMaxLength(25);
@@ -379,6 +385,7 @@ public partial class BetacomioCyclesContext : DbContext
                 .IsFixedLength();
             entity.Property(e => e.Description).HasMaxLength(400);
             entity.Property(e => e.ListPrice).HasColumnType("money");
+            entity.Property(e => e.Material).HasMaxLength(256);
             entity.Property(e => e.ModelType).HasMaxLength(50);
             entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
             entity.Property(e => e.Name).HasMaxLength(50);
@@ -387,7 +394,7 @@ public partial class BetacomioCyclesContext : DbContext
             entity.Property(e => e.ProductType).HasMaxLength(50);
             entity.Property(e => e.Size).HasMaxLength(5);
             entity.Property(e => e.StandardCost).HasColumnType("money");
-            entity.Property(e => e.ThumbnailPhotoFileName).HasMaxLength(50);
+            entity.Property(e => e.WarrantyPeriod).HasMaxLength(256);
             entity.Property(e => e.Weight).HasColumnType("decimal(8, 2)");
         });
 

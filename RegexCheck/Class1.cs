@@ -330,7 +330,7 @@ namespace RegexCheck
         /// <param name="connession"></param>
         /// <param name="nationality"></param>
         ///<returns> Lista di prodotti in lingua specifica </returns>
-        public async Task<IEnumerable<ViewUserProduct>> ProductsWithLanguage(SingleTonConnectDB connession , int nationality)
+        public async Task<IEnumerable<ViewUserProduct>> ProductsWithLanguage(MainSingleton connectao , int nationality)
         {
             
             List<ViewUserProduct> langProducts = new();
@@ -338,7 +338,7 @@ namespace RegexCheck
 
             try
             {   
-                connectDB(connession.ConnectDb()); //necessario Singleton che si connetta a DB BetacomioCycles
+                connectDB(connectao.ConnectToMainDB()); //necessario Singleton che si connetta a DB BetacomioCycles
                 SqlCommand sql = sqlConnection.CreateCommand();
                 sql.CommandType = System.Data.CommandType.StoredProcedure;
                 sql.CommandText = "ShowProductsLanguage";
@@ -373,7 +373,8 @@ namespace RegexCheck
                             Size = dr["Size"].ToString(),
                             Weight = decimalValue,
                             Description = dr["Description"].ToString(),
-                            ThumbnailPhoto = ImgConverter.GetImageFromByteArray((byte[])dr["ThumbnailPhoto"]), //converto array di byte in bitmap
+                            //ThumbnailPhoto = ImgConverter.GetImageFromByteArray((byte[])dr["ThumbnailPhoto"]), //converto array di byte in bitmap
+                            ThumbnailPhoto = (byte[])dr["ThumbnailPhoto"],
                             Culture = dr["Culture"].ToString()
 
                         });
