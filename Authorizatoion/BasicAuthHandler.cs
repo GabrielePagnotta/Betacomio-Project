@@ -13,6 +13,7 @@ using Microsoft.VisualBasic;
 using Betacomio_Project.Controllers;
 using RegexCheck;
 using Betacomio_Project.ConnectDb;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace FirstMVC.Auth
 {
@@ -49,8 +50,8 @@ namespace FirstMVC.Auth
                 {
                 
                 string[] passUSer  = regexCh.CheckUsernameAndPassword(credential[0], _connession );
-                regexCh.CheckLogin(credential[1], passUSer[0] , passUSer[1].ToString() );
-
+                bool checkPass = regexCh.CheckLogin(credential[1], passUSer[0] , passUSer[1].ToString() );
+                if(checkPass == false) { throw new Exception("la password inerita è errata "); }
                 if (passUSer[0] == null)
                 {
                        

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Betacomio_Project.Login;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 
@@ -16,7 +17,7 @@ namespace Betacomio_Project.Controllers
         // POST api/<Login>
         [HttpPost]
         [Authorize("BasicAuthentication")]
-        public void Post()
+        public List<LoginSchem> Post()
         {
             var user = HttpContext.User;
             try
@@ -24,6 +25,13 @@ namespace Betacomio_Project.Controllers
                 if (user.Identity.IsAuthenticated == true)
                 {
                     Console.WriteLine($"dati utente autenticato {user.Identity.Name} , {user.Identity.AuthenticationType}  ");
+                    Random random = new Random();
+                    var token1 = random.Next();
+                    List<LoginSchem> users = new List<LoginSchem>();
+                    users.Add(new LoginSchem(user.Identity.Name, token1));
+                  
+                   
+                    return users;
                 }
                 else
                 {
@@ -35,7 +43,8 @@ namespace Betacomio_Project.Controllers
                 Console.WriteLine("errore in fase di autenticazione " + "  " +  err.Message + "  " + err.Data );
                
             }
-          
+            List<LoginSchem> empty = new List<LoginSchem>();
+            return empty;
         }
 
 

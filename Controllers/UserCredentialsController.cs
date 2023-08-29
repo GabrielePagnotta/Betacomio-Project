@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Betacomio_Project.Controllers
 {
-    [Authorize("BasicAuthentication")]
+   
     [Route("api/[controller]")]
     [ApiController]
     public class UserCredentialsController : ControllerBase
