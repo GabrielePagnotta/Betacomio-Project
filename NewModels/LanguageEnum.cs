@@ -9,5 +9,7 @@ public partial class LanguageEnum
 
     public string Language { get; set; } = null!;
 
+    public string LanguageCode { get; set; } = null!;
+
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

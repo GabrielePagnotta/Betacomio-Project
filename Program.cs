@@ -31,8 +31,12 @@ builder.Services.AddDbContext<BetacomioCyclesContext>(option => option.UseSqlSer
 builder.Services.AddDbContext<AdminLogContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("AdminLog")));
 
 //Servizio connessione al DB
-var strinConn = builder.Configuration.GetConnectionString("AdminLog");
-builder.Services.AddSingleton<SingleTonConnectDB>(option => new SingleTonConnectDB(strinConn));
+var strinConnAdminLog = builder.Configuration.GetConnectionString("AdminLog");
+var strinConnBetacomioCycles = builder.Configuration.GetConnectionString("BetacomioCycles");
+
+builder.Services.AddSingleton<SingleTonConnectDB>(option => new SingleTonConnectDB(strinConnAdminLog));
+builder.Services.AddSingleton<MainSingleton>(option => new MainSingleton(strinConnBetacomioCycles));
+
 
 //Utilizzo RegexCh come servizio
 builder.Services.AddScoped<RegexCh>();

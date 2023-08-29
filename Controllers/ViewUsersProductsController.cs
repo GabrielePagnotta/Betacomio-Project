@@ -34,8 +34,8 @@ namespace Betacomio_Project.Controllers
         //}
 
         [HttpGet]
-        //public async Task<ActionResult<IEnumerable<ViewUserProduct>>> GetUserProductsByLanguage(SingleTonConnectDB connession, int nationality)
-        //{
+        public async Task<ActionResult<IEnumerable<ViewUserProduct>>> GetUserProductsByLanguage(MainSingleton connectao, int nationality)
+        {
 
         //    try
         //    {
@@ -44,15 +44,15 @@ namespace Betacomio_Project.Controllers
         //            return NotFound();
         //        }
 
-        //        //var productsByLanguage = await _regex.ProductsWithLanguage(connession, nationality);
-        //        return Ok(productsByLanguage);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, $"An error occurred: {ex.Message}");
-        //        // mettere Nlog
-        //    }
-        //}
+                var productsByLanguage = await _regex.ProductsWithLanguage(connectao, nationality);
+                return Ok(productsByLanguage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+                // mettere Nlog
+            }
+        }
 
 
         [HttpGet("{name}")]

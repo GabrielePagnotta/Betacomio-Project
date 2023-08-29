@@ -332,18 +332,18 @@ namespace RegexCheck
         /// <param name="connession"></param>
         /// <param name="nationality"></param>
         ///<returns> Lista di prodotti in lingua specifica </returns>
-        //public async Task<IEnumerable<ViewUserProduct>> ProductsWithLanguage(SingleTonConnectDB connession , int nationality)
-        //{
+        public async Task<IEnumerable<ViewUserProduct>> ProductsWithLanguage(MainSingleton connectao , int nationality)
+        {
             
         //    List<ViewUserProduct> langProducts = new();
         //    decimal decimalValue;
 
-        //    try
-        //    {   
-        //        connectDB(connession.ConnectDb()); //necessario Singleton che si connetta a DB BetacomioCycles
-        //        SqlCommand sql = sqlConnection.CreateCommand();
-        //        sql.CommandType = System.Data.CommandType.StoredProcedure;
-        //        sql.CommandText = "ShowProductsLanguage";
+            try
+            {   
+                connectDB(connectao.ConnectToMainDB()); //necessario Singleton che si connetta a DB BetacomioCycles
+                SqlCommand sql = sqlConnection.CreateCommand();
+                sql.CommandType = System.Data.CommandType.StoredProcedure;
+                sql.CommandText = "ShowProductsLanguage";
 
         //        //mostra prodotti della stessa lingua dell'utente (in base a Nationality)
         //        sql.Parameters.AddWithValue("@userNationality", nationality);
@@ -365,18 +365,19 @@ namespace RegexCheck
         //                    decimalValue = (decimal)dr["Weight"];
         //                }
 
-        //                langProducts.Add(new ViewUserProduct
-        //                {
-        //                    Name = dr["Name"].ToString(),
-        //                    ProductType = dr["ProductType"].ToString(),
-        //                    ModelType = dr["ModelType"].ToString(),
-        //                    ListPrice = (decimal)dr["ListPrice"],
-        //                    Color = dr["Color"].ToString(),
-        //                    Size = dr["Size"].ToString(),
-        //                    Weight = decimalValue,
-        //                    Description = dr["Description"].ToString(),
-        //                    ThumbnailPhoto = ImgConverter.GetImageFromByteArray((byte[])dr["ThumbnailPhoto"]), //converto array di byte in bitmap
-        //                    Culture = dr["Culture"].ToString()
+                        langProducts.Add(new ViewUserProduct
+                        {
+                            Name = dr["Name"].ToString(),
+                            ProductType = dr["ProductType"].ToString(),
+                            ModelType = dr["ModelType"].ToString(),
+                            ListPrice = (decimal)dr["ListPrice"],
+                            Color = dr["Color"].ToString(),
+                            Size = dr["Size"].ToString(),
+                            Weight = decimalValue,
+                            Description = dr["Description"].ToString(),
+                            //ThumbnailPhoto = ImgConverter.GetImageFromByteArray((byte[])dr["ThumbnailPhoto"]), //converto array di byte in bitmap
+                            ThumbnailPhoto = (byte[])dr["ThumbnailPhoto"],
+                            Culture = dr["Culture"].ToString()
 
         //                });
 

@@ -11,27 +11,31 @@ public partial class ViewAdminProduct
 
     public string ProductNumber { get; set; } = null!;
 
+    public string ProductType { get; set; } = null!;
+
+    public string ModelType { get; set; } = null!;
+
+    public decimal StandardCost { get; set; }
+
+    public decimal ListPrice { get; set; }
+
     public string? Color { get; set; }
 
     public string? Size { get; set; }
 
     public decimal? Weight { get; set; }
 
-    public decimal StandardCost { get; set; }
+    public string? WarrantyPeriod { get; set; }
 
-    public decimal ListPrice { get; set; }
-
-    public DateTime ModifiedDate { get; set; }
-
-    public string? ThumbnailPhotoFileName { get; set; }
-
-    public string ProductType { get; set; } = null!;
+    public string? Material { get; set; }
 
     public string Description { get; set; } = null!;
 
-    public string ModelType { get; set; } = null!;
+    public byte[]? ThumbnailPhoto { get; set; }
 
     public string? CatalogDescription { get; set; }
 
     public string Culture { get; set; } = null!;
+
+    public DateTime ModifiedDate { get; set; }
 }

@@ -5,6 +5,20 @@ namespace Betacomio_Project.NewModels;
 
 public partial class ViewAdminUserRegistry
 {
+    public int UserId { get; set; }
+
+    public string Name { get; set; } = null!;
+
+    public string Surname { get; set; } = null!;
+
+    public string? BirthYear { get; set; }
+
+    public string Email { get; set; } = null!;
+
+    public string? Phone { get; set; }
+
+    public int Nationality { get; set; }
+
     public int AddressId { get; set; }
 
     public string Address { get; set; } = null!;
@@ -20,18 +34,4 @@ public partial class ViewAdminUserRegistry
     public string PostalCode { get; set; } = null!;
 
     public DateTime ModifiedDate { get; set; }
-
-    public int UserId { get; set; }
-
-    public string Name { get; set; } = null!;
-
-    public string Surname { get; set; } = null!;
-
-    public string? BirthYear { get; set; }
-
-    public string Email { get; set; } = null!;
-
-    public string? Phone { get; set; }
-
-    public int Nationality { get; set; }
 }

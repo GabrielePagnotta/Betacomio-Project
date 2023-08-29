@@ -138,7 +138,7 @@ namespace Betacomio_Project.Controllers
                         StandardCost = (decimal)dr["StandardCost"],
                         ListPrice = (decimal)dr["ListPrice"],
                         ModifiedDate = Convert.ToDateTime(dr["ModifiedDate"]),
-                        ThumbnailPhotoFileName = dr["ThumbnailPhotoFileName"].ToString(),
+                        ThumbnailPhoto = (byte[])dr["ThumbnailPhotoFileName"],
                         ProductType = dr["ProductType"].ToString(),
                         Description = dr["Description"].ToString(),
                         ModelType = dr["ModelType"].ToString(),

@@ -29,9 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="ImageConvertio">
-      <HintPath>..\..\ImageConvertio\bin\Debug\net7.0\ImageConvertio.dll</HintPath>
-    </Reference>
     <Reference Include="RegexCheck">
       <HintPath>RegexCheck\bin\Debug\net7.0\RegexCheck.dll</HintPath>
     </Reference>
@@ -39,6 +36,7 @@
 
   <ItemGroup>
     <Folder Include="NewModels\" />
+    <Folder Include="ImageConvertio\" />
   </ItemGroup>
 
 
