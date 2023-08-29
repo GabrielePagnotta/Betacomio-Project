@@ -332,38 +332,38 @@ namespace RegexCheck
         /// <param name="connession"></param>
         /// <param name="nationality"></param>
         ///<returns> Lista di prodotti in lingua specifica </returns>
-        public async Task<IEnumerable<ViewUserProduct>> ProductsWithLanguage(MainSingleton connectao , int nationality)
+        public async Task<IEnumerable<ViewUserProduct>> ProductsWithLanguage(MainSingleton connectao, int nationality)
         {
-            
-        //    List<ViewUserProduct> langProducts = new();
-        //    decimal decimalValue;
+
+                List<ViewUserProduct> langProducts = new();
+                decimal decimalValue;
 
             try
-            {   
+            {
                 connectDB(connectao.ConnectToMainDB()); //necessario Singleton che si connetta a DB BetacomioCycles
                 SqlCommand sql = sqlConnection.CreateCommand();
                 sql.CommandType = System.Data.CommandType.StoredProcedure;
                 sql.CommandText = "ShowProductsLanguage";
 
-        //        //mostra prodotti della stessa lingua dell'utente (in base a Nationality)
-        //        sql.Parameters.AddWithValue("@userNationality", nationality);
+               // mostra prodotti della stessa lingua dell'utente (in base a Nationality)
+               sql.Parameters.AddWithValue("@userNationality", nationality);
 
-        //        //avvio dataReader per leggere record della view UserProducts
-        //        SqlDataReader dr = sql.ExecuteReader();
+              //  avvio dataReader per leggere record della view UserProducts
+                SqlDataReader dr = sql.ExecuteReader();
 
-        //        using (dr)
-        //        {
-        //            while (await dr.ReadAsync())
-        //            {
+                using (dr)
+                {
+                    while (await dr.ReadAsync())
+                    {
 
-        //                if (DBNull.Value.Equals(dr["Weight"]))
-        //                {
-        //                    decimalValue = 0;
-        //                }
-        //                else
-        //                {
-        //                    decimalValue = (decimal)dr["Weight"];
-        //                }
+                        if (DBNull.Value.Equals(dr["Weight"]))
+                        {
+                            decimalValue = 0;
+                        }
+                        else
+                        {
+                            decimalValue = (decimal)dr["Weight"];
+                        }
 
                         langProducts.Add(new ViewUserProduct
                         {
@@ -379,20 +379,20 @@ namespace RegexCheck
                             ThumbnailPhoto = (byte[])dr["ThumbnailPhoto"],
                             Culture = dr["Culture"].ToString()
 
-        //                });
+                        });
 
-                        
-        //            }
-        //        }
 
-        //       return langProducts;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("Errore nel metodo ProductsWithLanguage: " + ex.Message);
+                    }
+                }
 
-        //    }
-        //}
+                return langProducts;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore nel metodo ProductsWithLanguage: " + ex.Message);
+
+            }
+        }
 
 
     }

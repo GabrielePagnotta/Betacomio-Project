@@ -37,12 +37,12 @@ namespace Betacomio_Project.Controllers
         public async Task<ActionResult<IEnumerable<ViewUserProduct>>> GetUserProductsByLanguage(MainSingleton connectao, int nationality)
         {
 
-        //    try
-        //    {
-        //        if (_context.ViewUserProducts == null)
-        //        {
-        //            return NotFound();
-        //        }
+          try
+           {
+              if (_context.ViewUserProducts == null)
+             {
+                  return NotFound();
+               }
 
                 var productsByLanguage = await _regex.ProductsWithLanguage(connectao, nationality);
                 return Ok(productsByLanguage);
