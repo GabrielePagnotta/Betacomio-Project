@@ -24,15 +24,18 @@ namespace Betacomio_Project.Controllers
             _regex = regex;
         }
 
-        //public async Task<ActionResult<IEnumerable<ViewUserProduct>>> GetUserProducts()
-        //{
-        //    if (_context.ViewUserProducts == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return await _context.ViewUserProducts.ToListAsync();
-        //}
+        [Route("api/[controller]/GetUserProducts")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ViewUserProduct>>> GetUserProducts()
+        {
+            if (_context.ViewUserProducts == null)
+            {
+                return NotFound();
+            }
+            return await _context.ViewUserProducts.ToListAsync();
+        }
 
+        [Route("api/[controller]/GetUserProductsByLanguage")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ViewUserProduct>>> GetUserProductsByLanguage(MainSingleton connectao, int nationality)
         {
