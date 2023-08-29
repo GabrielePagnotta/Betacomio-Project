@@ -47,7 +47,8 @@ namespace Betacomio_Project.ConnectDb
                 Console.WriteLine($"si è verificato un errore : {ex.Message}");
 
             }
-            return null;
+
+            return conn.ConnectionString;
         }
     }
 }
