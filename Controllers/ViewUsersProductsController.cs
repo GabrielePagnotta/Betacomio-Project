@@ -25,7 +25,7 @@ namespace Betacomio_Project.Controllers
         }
 
         
-        [HttpGet]
+        [HttpGet("GetUserProducts")]
         public async Task<ActionResult<IEnumerable<ViewUserProduct>>> GetUserProducts()
         {
             if (_context.ViewUserProducts == null)
@@ -35,27 +35,26 @@ namespace Betacomio_Project.Controllers
             return await _context.ViewUserProducts.Take(100).ToListAsync();
         }
 
-        //[Route("api/[controller]/GetUserProductsByLanguage")]
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<ViewUserProduct>>> GetUserProductsByLanguage(MainSingleton connectao, int nationality)
-        //{
+        [HttpGet("GetUserProductsByLanguage")]
+        public async Task<ActionResult<IEnumerable<ViewUserProduct>>> GetUserProductsByLanguage(MainSingleton connectao, int nationality)
+        {
 
-        //  try
-        //   {
-        //      if (_context.ViewUserProducts == null)
-        //     {
-        //          return NotFound();
-        //       }
+            try
+            {
+                if (_context.ViewUserProducts == null)
+                {
+                    return NotFound();
+                }
 
-        //        var productsByLanguage = await _regex.ProductsWithLanguage(connectao, nationality);
-        //        return Ok(productsByLanguage);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, $"An error occurred: {ex.Message}");
-        //        // mettere Nlog
-        //    }
-        //}
+                var productsByLanguage = await _regex.ProductsWithLanguage(connectao, nationality);
+                return Ok(productsByLanguage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+                // mettere Nlog
+            }
+        }
 
 
         [HttpGet("{name}")]

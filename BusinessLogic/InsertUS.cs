@@ -5,10 +5,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.ComponentModel;
-using Betacomio_Project.NewModels;
 using Betacomio_Project.LogModels;
 
-namespace Betacomio_Project.Controllers
+namespace Betacomio_Project.BusinessLogic
 {
     public class InsertUS
     {

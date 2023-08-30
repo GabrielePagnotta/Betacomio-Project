@@ -9,6 +9,7 @@ using Betacomio_Project.LogModels;
 using Betacomio_Project.ConnectDb;
 using RegexCheck;
 using Microsoft.AspNetCore.Authorization;
+using Betacomio_Project.BusinessLogic;
 
 namespace Betacomio_Project.Controllers
 {
