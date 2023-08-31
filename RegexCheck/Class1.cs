@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 
 using System.Drawing;
+using Microsoft.CodeAnalysis;
 
 namespace RegexCheck
 {
@@ -392,6 +393,52 @@ namespace RegexCheck
                 throw new Exception("Errore nel metodo ProductsWithLanguage: " + ex.Message);
 
             }
+        }
+
+        public List<string> myProfileLogin(SingleTonConnectDB _connession , string email)
+        {
+            List<string> dati = new List<string>();
+            connectDB(_connession.ConnectDb());
+            try
+            {
+                SqlCommand sql = sqlConnection.CreateCommand();
+                sql.CommandType = System.Data.CommandType.StoredProcedure;
+                sql.CommandText = "[dbo].[UserData]";
+                sql.Parameters.AddWithValue("@email", email);
+                SqlDataReader sqlData = sql.ExecuteReader();
+                Console.WriteLine(sqlData);
+                if (sqlData.HasRows)
+                {
+                    while (sqlData.Read())
+                    {
+                        dati.Add(sqlData[0].ToString());
+                        dati.Add(sqlData[1].ToString());
+                        dati.Add(sqlData[2].ToString());
+                        dati.Add(sqlData[3].ToString());
+                        dati.Add(sqlData[4].ToString());
+                        dati.Add(sqlData[5].ToString());
+                        dati.Add(sqlData[6].ToString());
+                        return dati;
+                    }
+
+
+                   
+                    
+
+                    
+                   
+                }
+                else
+                {
+                    new Exception("errore username inserita ");
+                }
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+            }
+
+            return dati;
         }
 
 
