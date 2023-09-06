@@ -10,6 +10,8 @@ using System.Text.Json.Nodes;
 using Newtonsoft.Json;
 using Betacomio_Project.LogModels;
 using Microsoft.Data.SqlClient;
+using Betacomio_Project.ConnectDb;
+using RegexCheck;
 
 namespace Betacomio_Project.ControllersBeta
 {
@@ -18,11 +20,15 @@ namespace Betacomio_Project.ControllersBeta
     public class WishlistTempsController : ControllerBase
     {
         private readonly AdminLogContext _context;
+        private readonly SingleTonConnectDB _db;
+        private readonly RegexCh _regex;
         SqlConnection sqlConnection = new SqlConnection();
 
-        public WishlistTempsController(AdminLogContext context)
+        public WishlistTempsController(AdminLogContext context, SingleTonConnectDB db, RegexCh regex)
         {
             _context = context;
+            _regex = regex;
+            _db = db;
         }
 
         [HttpGet]
@@ -69,7 +75,7 @@ namespace Betacomio_Project.ControllersBeta
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!WishlistExists(id))
+                if (!WishlistTempExists(id))
                 {
                     return NotFound();
                 }
@@ -84,7 +90,7 @@ namespace Betacomio_Project.ControllersBeta
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<IActionResult> PostWishlist(WishlistTemp wishItem)
+        public async Task<IActionResult> PostWishlist(SingleTonConnectDB connection, WishlistTemp wishItem)
         {
             if (_context.WishlistTemps == null)
             {
@@ -92,16 +98,26 @@ namespace Betacomio_Project.ControllersBeta
             }
 
             _context.WishlistTemps.Add(wishItem);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+                _regex.PassWishlistData(connection, wishItem.ProductId, wishItem.UserId);
 
-            //Avvia stored procedure per passare dati a wishlist originale
-            SqlCommand sql = sqlConnection.CreateCommand();
-            sql.CommandType = System.Data.CommandType.StoredProcedure;
-            sql.CommandText = "WishlistDataToMainDB"; //SP che inserisce dati da wishlist temporanea a quella originale
-            sql.Parameters.AddWithValue("@userIdentifier", wishItem.UserId);
-            sql.Parameters.AddWithValue("@prodIdentifier", wishItem.ProductId);
 
-            return Ok($"Wishlist aggiunta con successo per utente: {wishItem.UserId}");
+            }
+            catch (DbUpdateException)
+            {
+                if (WishlistTempExists(wishItem.UserId))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return Ok($"Oggetto aggiunto con successo nella wishlist per utente: {wishItem.UserId}");
         }
 
         [HttpDelete("{id}")]
@@ -123,7 +139,7 @@ namespace Betacomio_Project.ControllersBeta
             return NoContent();
         }
 
-        private bool WishlistExists(int id)
+        private bool WishlistTempExists(int id)
         {
             return (_context.WishlistTemps?.Any(e => e.UserId == id)).GetValueOrDefault();
         }

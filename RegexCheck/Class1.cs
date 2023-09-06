@@ -441,6 +441,52 @@ namespace RegexCheck
             return dati;
         }
 
+        public void PassWishlistData(SingleTonConnectDB _connession, int productId, int userId)
+        {
+           
+            connectDB(_connession.ConnectDb());
+            try
+            {
+                SqlCommand sql = sqlConnection.CreateCommand();
+                sql.CommandType = System.Data.CommandType.StoredProcedure;
+                sql.CommandText = "WishlistDataToMainDB"; //SP che inserisce dati da wishlist temporanea a quella originale
+                sql.Parameters.AddWithValue("@userIdentifier", userId);
+                sql.Parameters.AddWithValue("@prodIdentifier", productId);
+
+                sql.ExecuteNonQuery(); //esegui SQL query
+
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+            }
+
+           
+        }
+
+        public void PassShoppingCartData(SingleTonConnectDB _connession, int productId, int userId)
+        {
+
+            connectDB(_connession.ConnectDb());
+            try
+            {
+                SqlCommand sql = sqlConnection.CreateCommand();
+                sql.CommandType = System.Data.CommandType.StoredProcedure;
+                sql.CommandText = "ShoppingDataToMainDB"; 
+                sql.Parameters.AddWithValue("@userIdentifier", userId);
+                sql.Parameters.AddWithValue("@prodIdentifier", productId);
+
+                sql.ExecuteNonQuery();
+
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+            }
+
+
+        }
+
 
     }
 
