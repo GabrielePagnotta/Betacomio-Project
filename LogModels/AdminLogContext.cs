@@ -6,9 +6,6 @@ namespace Betacomio_Project.LogModels;
 
 public partial class AdminLogContext : DbContext
 {
-    public AdminLogContext()
-    {
-    }
 
     public AdminLogContext(DbContextOptions<AdminLogContext> options)
         : base(options)
@@ -17,7 +14,13 @@ public partial class AdminLogContext : DbContext
 
     public virtual DbSet<ErrorLog> ErrorLogs { get; set; }
 
+    public virtual DbSet<ShoppingCartTemp> ShoppingCartTemps { get; set; }
+
     public virtual DbSet<UserCredential> UserCredentials { get; set; }
+
+    public virtual DbSet<UserRequestsTemp> UserRequestsTemps { get; set; }
+
+    public virtual DbSet<WishlistTemp> WishlistTemps { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -40,6 +43,19 @@ public partial class AdminLogContext : DbContext
             entity.Property(e => e.ErrorTime).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<ShoppingCartTemp>(entity =>
+        {
+            entity.HasKey(e => e.UserId);
+
+            entity.ToTable("ShoppingCartTemp");
+
+            entity.Property(e => e.UserId).ValueGeneratedNever();
+            entity.Property(e => e.AddedDate).HasColumnType("datetime");
+            entity.Property(e => e.Rowguid).HasColumnName("rowguid");
+            entity.Property(e => e.TotalPrice).HasColumnType("money");
+            entity.Property(e => e.UnitPrice).HasColumnType("money");
+        });
+
         modelBuilder.Entity<UserCredential>(entity =>
         {
             entity.HasKey(e => e.UserId);
@@ -56,12 +72,40 @@ public partial class AdminLogContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("Password_Hash");
             entity.Property(e => e.PasswordSalt)
-                .HasMaxLength(10)
+                .HasMaxLength(128)
                 .IsUnicode(false)
                 .HasColumnName("Password_Salt");
             entity.Property(e => e.Phone).HasMaxLength(25);
             entity.Property(e => e.Surname).HasMaxLength(50);
             entity.Property(e => e.Username).HasMaxLength(30);
+        });
+
+        modelBuilder.Entity<UserRequestsTemp>(entity =>
+        {
+            entity.HasKey(e => e.RequestId);
+
+            entity.ToTable("UserRequestsTemp");
+
+            entity.Property(e => e.RequestId)
+                .ValueGeneratedNever()
+                .HasColumnName("RequestID");
+            entity.Property(e => e.RequestBody)
+                .HasColumnType("text")
+                .HasColumnName("Request_Body");
+            entity.Property(e => e.RequestObject)
+                .HasMaxLength(150)
+                .HasColumnName("Request_Object");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+        });
+
+        modelBuilder.Entity<WishlistTemp>(entity =>
+        {
+            entity.HasKey(e => new { e.UserId, e.ProductId });
+
+            entity.ToTable("WishlistTemp");
+
+            entity.Property(e => e.AddedDate).HasColumnType("datetime");
+            entity.Property(e => e.Rowguid).HasColumnName("rowguid");
         });
 
         OnModelCreatingPartial(modelBuilder);

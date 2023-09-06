@@ -19,6 +19,8 @@ public partial class UserCredential
 
     public string? Phone { get; set; }
 
+    public bool Role { get; set; }
+
     public string PasswordHash { get; set; } = null!;
 
     public string PasswordSalt { get; set; } = null!;

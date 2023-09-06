@@ -11,30 +11,32 @@ using RegexCheck;
 using Microsoft.AspNetCore.Authorization;
 using Betacomio_Project.BusinessLogic;
 
-namespace Betacomio_Project.Controllers
+namespace Betacomio_Project.ControllersBeta
 {
-   
+
     [Route("api/[controller]")]
     [ApiController]
     public class UserCredentialsController : ControllerBase
     {
         private readonly AdminLogContext _context;
         private readonly SingleTonConnectDB _connession;
+        private readonly RegexCh _regex;
 
-        public UserCredentialsController(AdminLogContext context , SingleTonConnectDB connession)
+        public UserCredentialsController(AdminLogContext context, SingleTonConnectDB connession, RegexCh regex)
         {
             _context = context;
             _connession = connession;
+            _regex = regex;
         }
 
         // GET: api/UserCredentials
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserCredential>>> GetUserCredentials()
         {
-          if (_context.UserCredentials == null)
-          {
-              return NotFound();
-          }
+            if (_context.UserCredentials == null)
+            {
+                return NotFound();
+            }
             return await _context.UserCredentials.ToListAsync();
         }
 
@@ -42,10 +44,10 @@ namespace Betacomio_Project.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UserCredential>> GetUserCredential(int id)
         {
-          if (_context.UserCredentials == null)
-          {
-              return NotFound();
-          }
+            if (_context.UserCredentials == null)
+            {
+                return NotFound();
+            }
             var userCredential = await _context.UserCredentials.FindAsync(id);
 
             if (userCredential == null)
@@ -96,8 +98,8 @@ namespace Betacomio_Project.Controllers
             {
                 return Problem("Entity set 'UserRegistryContext.Users'  is null.");
             }
-            RegexCh regex = new RegexCh();
-            bool existUser = regex.Checkusername( _connession, userCredential.Username, userCredential.Email);
+
+            bool existUser = _regex.Checkusername(_connession, userCredential.Username, userCredential.Email);
             if (existUser == true) { return BadRequest(404); }
 
             InsertUS insertUS = new InsertUS();

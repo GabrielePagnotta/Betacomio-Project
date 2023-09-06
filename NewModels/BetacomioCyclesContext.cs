@@ -6,9 +6,6 @@ namespace Betacomio_Project.NewModels;
 
 public partial class BetacomioCyclesContext : DbContext
 {
-    public BetacomioCyclesContext()
-    {
-    }
 
     public BetacomioCyclesContext(DbContextOptions<BetacomioCyclesContext> options)
         : base(options)
@@ -48,7 +45,6 @@ public partial class BetacomioCyclesContext : DbContext
     public virtual DbSet<ViewUserProduct> ViewUserProducts { get; set; }
 
     public virtual DbSet<Wishlist> Wishlists { get; set; }
-
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -286,8 +282,7 @@ public partial class BetacomioCyclesContext : DbContext
 
             entity.ToTable("ShoppingCart");
 
-            entity.Property(e => e.AddedDate).HasColumnType("date");
-            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.AddedDate).HasColumnType("datetime");
             entity.Property(e => e.Rowguid).HasColumnName("rowguid");
             entity.Property(e => e.TotalPrice).HasColumnType("money");
             entity.Property(e => e.UnitPrice).HasColumnType("money");
@@ -357,7 +352,6 @@ public partial class BetacomioCyclesContext : DbContext
             entity.HasKey(e => e.RequestId);
 
             entity.Property(e => e.RequestId).HasColumnName("RequestID");
-            entity.Property(e => e.Image).HasColumnType("image");
             entity.Property(e => e.RequestBody)
                 .HasColumnType("text")
                 .HasColumnName("Request_Body");
@@ -438,6 +432,7 @@ public partial class BetacomioCyclesContext : DbContext
             entity.Property(e => e.ListPrice).HasColumnType("money");
             entity.Property(e => e.ModelType).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.ProductId).HasColumnName("ProductID");
             entity.Property(e => e.ProductType).HasMaxLength(50);
             entity.Property(e => e.Size).HasMaxLength(5);
             entity.Property(e => e.Weight).HasColumnType("decimal(8, 2)");

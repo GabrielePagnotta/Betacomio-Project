@@ -17,8 +17,6 @@ public partial class ShoppingCart
 
     public DateTime AddedDate { get; set; }
 
-    public DateTime ModifiedDate { get; set; }
-
     public Guid Rowguid { get; set; }
 
     public virtual Product Product { get; set; } = null!;

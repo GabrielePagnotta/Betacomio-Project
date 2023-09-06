@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Betacomio_Project.NewModels;
+using System.Text.Json.Nodes;
+using Newtonsoft.Json;
 
 namespace Betacomio_Project.Controllers
 {
@@ -83,30 +85,49 @@ namespace Betacomio_Project.Controllers
         // POST: api/Wishlist
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Wishlist>> PostWishlist(Wishlist wishlist)
+        public async Task<IActionResult> PostWishlist( Wishlist wishItem)
         {
-          if (_context.Wishlists == null)
-          {
-              return Problem("Entity set 'BetacomioCyclesContext.Wishlists'  is null.");
-          }
-            _context.Wishlists.Add(wishlist);
-            try
+
+            //Recupero dati utente attraverso ID
+            var userData = await _context.Users.FirstAsync(el => el.UserId == wishItem.UserId);
+
+            //Recupero dati prodotto attraverso ID
+            var productData = await _context.Products.FirstAsync(el => el.ProductId == wishItem.ProductId);
+
+            if(userData == null)
             {
-                await _context.SaveChangesAsync();
+                return BadRequest("Utente non valido");
             }
-            catch (DbUpdateException)
+            else if(productData == null)
             {
-                if (WishlistExists(wishlist.UserId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest("Prodotto non trovato");
             }
 
-            return CreatedAtAction("GetWishlist", new { id = wishlist.UserId }, wishlist);
+            try
+            {
+                var wishlist = new Wishlist
+                {
+                    UserId = wishItem.UserId,
+                    ProductId = wishItem.ProductId,
+                    AddedDate = DateTime.Now,
+                    Rowguid = new Guid(),
+                    User = userData,
+                    Product = productData
+
+                };
+
+                _context.Wishlists.Add(wishlist);
+                Console.WriteLine(wishlist);
+                await _context.SaveChangesAsync();
+                return Ok("Prodotto aggiunto con successo a Wishlist");
+            }
+
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, $"Si è verificato un errore: {ex.Message}");
+            }
+
         }
 
         // DELETE: api/Wishlist/5

@@ -5,6 +5,8 @@ namespace Betacomio_Project.NewModels;
 
 public partial class ViewUserProduct
 {
+    public int ProductId { get; set; }
+
     public string Name { get; set; } = null!;
 
     public string ProductType { get; set; } = null!;

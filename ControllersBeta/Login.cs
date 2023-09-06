@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Betacomio_Project.Controllers
+namespace Betacomio_Project.ControllersBeta
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -20,7 +20,7 @@ namespace Betacomio_Project.Controllers
     {
         private readonly SingleTonConnectDB _connectDB;
         private readonly AdminLogContext logContext;
-        public Login(SingleTonConnectDB connectDB , AdminLogContext context)
+        public Login(SingleTonConnectDB connectDB, AdminLogContext context)
         {
             _connectDB = connectDB;
             logContext = context;
@@ -42,13 +42,13 @@ namespace Betacomio_Project.Controllers
                     var token1 = random.Next();
                     List<LoginSchem> users = new List<LoginSchem>();
                     RegexCh UserData = new RegexCh();
-                   var datUsers =  UserData.myProfileLogin(_connectDB, user.Identity.Name);
-                        
-                    users.Add(new LoginSchem(user.Identity.Name, token1 , datUsers[0].ToString(), datUsers[1] , datUsers[2] , datUsers[3] , datUsers[4]  , datUsers[6] ));
+                    var datUsers = UserData.myProfileLogin(_connectDB, user.Identity.Name);
+
+                    users.Add(new LoginSchem(user.Identity.Name, token1, datUsers[0].ToString(), datUsers[1], datUsers[2], datUsers[3], datUsers[4], datUsers[6]));
 
 
-              
-                   
+
+
                     return users;
                 }
                 else
@@ -58,8 +58,8 @@ namespace Betacomio_Project.Controllers
             }
             catch (Exception err)
             {
-                Console.WriteLine("errore in fase di autenticazione " + "  " +  err.Message + "  " + err.Data );
-               
+                Console.WriteLine("errore in fase di autenticazione " + "  " + err.Message + "  " + err.Data);
+
             }
             List<LoginSchem> empty = new List<LoginSchem>();
             return empty;
