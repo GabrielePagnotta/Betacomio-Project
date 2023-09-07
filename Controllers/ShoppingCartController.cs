@@ -28,7 +28,9 @@ namespace Betacomio_Project.Controllers
           {
               return NotFound();
           }
-            return await _context.ShoppingCarts.ToListAsync();
+            var shoppingCart = await _context.ShoppingCarts.Include(el => el.User).Include(el => el.Product).ToListAsync();
+
+            return shoppingCart;
         }
 
         // GET: api/ShoppingCart/5

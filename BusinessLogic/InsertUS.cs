@@ -23,7 +23,7 @@ namespace Betacomio_Project.BusinessLogic
 				if(regex.CheckUserEmail(user.Username , user.Email , user.Name , user.Surname) == true)
                 {} else { throw new Exception("email o username non valido "); };
                 if (user.PasswordHash.IsNullOrEmpty()) { throw new Exception("Il Campo Password non può essere Null o Vuoto");}
-				Regex RegexPassword = new Regex(@"^(?=.*[!@#$%^&*()\-_=+[\]{}|\\;:'""<>,.?/~])\S{7,12}$");
+				Regex RegexPassword = new Regex(@"^(?=.*[!@#$%^&*()\-_=+[\]{}|\\;:'""<>,.?/~])\S{6,15}$");
                 if (RegexPassword.IsMatch(user.PasswordHash)){
                     var PassSalt = regex.EncryptSalt(user.PasswordHash);
 

@@ -2,7 +2,7 @@
 
 namespace Betacomio_Project.ConnectDb
 {
-    public class SingleTonConnectDB
+    public class SingleTonConnectDB : IDisposable
     {
         SqlConnection conn = new SqlConnection();
         private static SingleTonConnectDB _instance;
@@ -27,6 +27,7 @@ namespace Betacomio_Project.ConnectDb
                 return _instance;
             }
         }
+
         public string ConnectDb()
         {
             bool Isok = false;
@@ -49,6 +50,11 @@ namespace Betacomio_Project.ConnectDb
             }
 
             return conn.ConnectionString;
+        }
+
+        public void Dispose()  //rilascia risorse impiegate per non accumulare garbage in cache
+        {
+            conn.Dispose();
         }
     }
 }
