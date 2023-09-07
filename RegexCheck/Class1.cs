@@ -49,13 +49,13 @@ namespace RegexCheck
             bool Email = false;
             try
             {
-                Regex regexNameSurName = new Regex(@"^([a-zA-Z]{5,})$");
+                Regex regexNameSurName = new Regex(@"^([a-zA-Z]{4,})$");
                 if ((name.ToLower() == null || name.ToLower() == "") && (surname.ToLower() == null || surname.ToLower() == ""))
                 { throw new Exception("il campo Nome/Cognome non può essere vuoto"); }
                 if (regexNameSurName.IsMatch(name) && regexNameSurName.IsMatch(surname)) { }
                 else { throw new Exception("Il campo nome deve contenere solo caratteri e non può contenere numeri o caratteri speciali"); };
                 Regex regex =  new Regex(@"^(?=.*[a-zA-Z])(?=.*\d.*\d).+$");  //questa regex controlla che la username abbia almeno 2 numeri e dei caratteri
-                if (user.Length >= 8)
+                if (user.Length >= 6)
                 {
                     if (regex.IsMatch(user))
                     {

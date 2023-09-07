@@ -12,7 +12,6 @@ namespace Betacomio_Project.BusinessLogic
     public class InsertUS
     {
 
-
         public void Usnew(UserCredential user)
         {
 			try
