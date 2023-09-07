@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 
 using System.Drawing;
 using Microsoft.CodeAnalysis;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace RegexCheck
 {
@@ -241,6 +242,7 @@ namespace RegexCheck
 
                 }
 
+
                 
 
             }
@@ -249,6 +251,10 @@ namespace RegexCheck
 
                 Console.WriteLine("errore nel metodo di controllo ìnserimento Usename e Password : " + err.Message);
                 
+            }
+            finally
+            {
+                connession.Dispose();
             }
 
             return null;
@@ -296,9 +302,10 @@ namespace RegexCheck
          #region metodo che controlla che in fase di registrazione l'utente non esista
         public bool Checkusername(SingleTonConnectDB connession, string username , string email) //ricerca se username o email sono le stesse
         {
+            bool isOk = true;
+
             try
             {
-                bool isOk = true;
                 connectDB(connession.ConnectDb());
                 
                 SqlCommand sql = sqlConnection.CreateCommand();
@@ -313,18 +320,64 @@ namespace RegexCheck
                 sql.Parameters.AddWithValue("@username" , username);
                 sql.Parameters.AddWithValue("@email", email);
                 SqlDataReader sqlData = sql.ExecuteReader();
-                if (sqlData.HasRows) { isOk = true; throw new Exception("Il nome utente o email sono già presenti del nostro DataBase");  }
-                return isOk = false;
+
+                using (sqlData)
+                {
+                    if (sqlData.HasRows)
+                    {
+                        isOk = true;
+                        throw new Exception("Il nome utente o email sono già presenti del nostro DataBase");
+
+                    }
+                    return isOk = false;
+
+                }
             }
             catch (Exception err)
             {
 
                 throw new Exception("Errore nel metodo checkUsername" + err.Message);
             }
+            finally
+            {
+                connession.Dispose();
+            }
 
-            return true;
         }
         #endregion //
+
+        /// <summary>
+        /// Inserisci utente registrato negli Users
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <param name="userId"></param>
+        /// <exception cref="Exception"></exception>
+        public async void PassUserCredentials(SingleTonConnectDB connection, int userId)
+        {
+
+            try
+            {
+                connectDB(connection.ConnectDb());
+                SqlCommand sql = sqlConnection.CreateCommand();
+                sql.CommandType = System.Data.CommandType.StoredProcedure;
+                sql.CommandText = "UserCredentialsToMainDB"; //Si passano i dati dell'utente da AdminLog a BetacomioCycles
+
+                sql.Parameters.AddWithValue("@userIdentifier", userId);
+
+                sql.ExecuteNonQuery();
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+            }
+            finally
+            {
+                connection.Dispose();
+            }
+        }
 
 
         /// <summary>
@@ -354,45 +407,60 @@ namespace RegexCheck
 
                 using (dr)
                 {
-                    while (await dr.ReadAsync())
+                    if (dr.HasRows)
                     {
-
-                        if (DBNull.Value.Equals(dr["Weight"]))
+                        while (await dr.ReadAsync())
                         {
-                            decimalValue = 0;
+
+                            if (DBNull.Value.Equals(dr["Weight"]))
+                            {
+                                decimalValue = 0;
+                            }
+                            else
+                            {
+                                decimalValue = (decimal)dr["Weight"];
+                            }
+
+                            langProducts.Add(new ViewUserProduct
+                            {
+                                Name = dr["Name"].ToString(),
+                                ProductType = dr["ProductType"].ToString(),
+                                ModelType = dr["ModelType"].ToString(),
+                                ListPrice = (decimal)dr["ListPrice"],
+                                Color = dr["Color"].ToString(),
+                                Size = dr["Size"].ToString(),
+                                Weight = decimalValue,
+                                Description = dr["Description"].ToString(),
+                                //ThumbnailPhoto = ImgConverter.GetImageFromByteArray((byte[])dr["ThumbnailPhoto"]), //converto array di byte in bitmap
+                                ThumbnailPhoto = (byte[])dr["ThumbnailPhoto"],
+                                Culture = dr["Culture"].ToString()
+
+                            });
                         }
-                        else
-                        {
-                            decimalValue = (decimal)dr["Weight"];
-                        }
-
-                        langProducts.Add(new ViewUserProduct
-                        {
-                            Name = dr["Name"].ToString(),
-                            ProductType = dr["ProductType"].ToString(),
-                            ModelType = dr["ModelType"].ToString(),
-                            ListPrice = (decimal)dr["ListPrice"],
-                            Color = dr["Color"].ToString(),
-                            Size = dr["Size"].ToString(),
-                            Weight = decimalValue,
-                            Description = dr["Description"].ToString(),
-                            //ThumbnailPhoto = ImgConverter.GetImageFromByteArray((byte[])dr["ThumbnailPhoto"]), //converto array di byte in bitmap
-                            ThumbnailPhoto = (byte[])dr["ThumbnailPhoto"],
-                            Culture = dr["Culture"].ToString()
-
-                        });
-
-
                     }
+                    else
+                    {
+                        throw new Exception("Il prodotto ricercato non è presente");
+                    }
+                    
                 }
 
-                return langProducts;
+
             }
             catch (Exception ex)
             {
                 throw new Exception("Errore nel metodo ProductsWithLanguage: " + ex.Message);
 
             }
+            finally
+            {
+                connectao.Dispose(); //si rilasciano le risorse
+            }
+
+            return langProducts;
+
+
+
         }
 
         public List<string> myProfileLogin(SingleTonConnectDB _connession , string email)
@@ -406,41 +474,51 @@ namespace RegexCheck
                 sql.CommandText = "[dbo].[UserData]";
                 sql.Parameters.AddWithValue("@email", email);
                 SqlDataReader sqlData = sql.ExecuteReader();
-                Console.WriteLine(sqlData);
-                if (sqlData.HasRows)
+
+                using (sql)
                 {
-                    while (sqlData.Read())
+                    if (sqlData.HasRows)
                     {
-                        dati.Add(sqlData[0].ToString());
-                        dati.Add(sqlData[1].ToString());
-                        dati.Add(sqlData[2].ToString());
-                        dati.Add(sqlData[3].ToString());
-                        dati.Add(sqlData[4].ToString());
-                        dati.Add(sqlData[5].ToString());
-                        dati.Add(sqlData[6].ToString());
-                        return dati;
+                        while (sqlData.Read())
+                        {
+                            dati.Add(sqlData[0].ToString());
+                            dati.Add(sqlData[1].ToString());
+                            dati.Add(sqlData[2].ToString());
+                            dati.Add(sqlData[3].ToString());
+                            dati.Add(sqlData[4].ToString());
+                            dati.Add(sqlData[5].ToString());
+                            dati.Add(sqlData[6].ToString());
+                            return dati;
+                        }
+
                     }
-
-
-                   
-                    
-
-                    
-                   
+                    else
+                    {
+                        new Exception("Errore username inserito");
+                    }
                 }
-                else
-                {
-                    new Exception("errore username inserita ");
-                }
+
+
             }
             catch (Exception err)
             {
                 Console.WriteLine(err.Message);
             }
+            finally
+            {
+                _connession.Dispose();
+            }
 
             return dati;
         }
 
+
+        /// <summary>
+        /// Richiesta POST di un prodotto nella Wishlist
+        /// </summary>
+        /// <param name="_connession"></param>
+        /// <param name="productId"></param>
+        /// <param name="userId"></param>
         public void PassWishlistData(SingleTonConnectDB _connession, int productId, int userId)
         {
            
@@ -460,10 +538,22 @@ namespace RegexCheck
             {
                 Console.WriteLine(err.Message);
             }
+            finally
+            {
+                _connession.Dispose();
 
-           
+            }
+
+
+
         }
 
+        /// <summary>
+        /// Richiesta POST di un prodotto nel carrello
+        /// </summary>
+        /// <param name="_connession"></param>
+        /// <param name="productId"></param>
+        /// <param name="userId"></param>
         public void PassShoppingCartData(SingleTonConnectDB _connession, int productId, int userId)
         {
 
@@ -481,7 +571,11 @@ namespace RegexCheck
             }
             catch (Exception err)
             {
-                Console.WriteLine(err.Message);
+                Console.WriteLine(err.Message); 
+            }
+            finally
+            {
+                _connession.Dispose();
             }
 
 

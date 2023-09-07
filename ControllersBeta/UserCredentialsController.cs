@@ -92,7 +92,7 @@ namespace Betacomio_Project.ControllersBeta
         // POST: api/UserCredentials
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<UserCredential>> PostUserCredential(UserCredential userCredential)
+        public async Task<ActionResult<UserCredential>> PostUserCredential(SingleTonConnectDB connection, UserCredential userCredential)
         {
             if (_context.UserCredentials == null)
             {
@@ -105,7 +105,17 @@ namespace Betacomio_Project.ControllersBeta
             InsertUS insertUS = new InsertUS();
             insertUS.Usnew(userCredential);
             _context.UserCredentials.Add(userCredential);
-            await _context.SaveChangesAsync();
+             await _context.SaveChangesAsync();
+
+            if(_context.SaveChangesAsync().IsCompletedSuccessfully == true)
+            {
+                //Attraverso SP passo utenti da DB isolato a quello originale solo se record è stato salvato sul DB isolato
+                _regex.PassUserCredentials(connection, userCredential.UserId);
+
+            }
+
+
+
             return Ok();
         }
 
