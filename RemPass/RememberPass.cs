@@ -64,26 +64,13 @@ namespace Betacomio_Project.RemPass
             }
            
         }
-        [Route("/[key]")]
+       
         [HttpPost]
         public void Post2(Remember value)
         {
             try
             {
-                if (value == null)
-                {
-                    BadRequest(400);
 
-                }
-
-                if (_Regex.ExistUser(_connect, value.email) == true)
-                {
-                    SendEmail send = new SendEmail();
-                    int key = send.CreateTestMessage2(value.email);
-                    LogicRemember logic = new LogicRemember(_connect);
-                    logic.SaveKey(_connect, value.email, key);
-
-                }
 
 
             }
