@@ -12,7 +12,7 @@ namespace Betacomio_Project.RemPass
         public int CreateTestMessage2( string email)
         {
             var numRand = new Random().Next(); //creo un codice random 
-            var url = "http://localhost:4200/About_us"; //url link paginna 
+            var url = "http://localhost:4200/confirmpassword"; //url link paginna 
             string body = $"<p>Clicca <a href=\"{url}\">qui</a> per visitare il sito. \n inserisci questo codici per la reimpostazione della password {numRand}</p>"; //corpo del messaggio
             try
             {
@@ -30,7 +30,7 @@ namespace Betacomio_Project.RemPass
                     Body = body
                 };
                 mailmessage.To.Add(email);
-                //client.Send(mailmessage); // inserisco il corpo del messaggio 
+                client.Send(mailmessage); // inserisco il corpo del messaggio 
                
                 Console.WriteLine("Sent");
                 return numRand;

@@ -1,6 +1,7 @@
 ﻿using Betacomio_Project.ConnectDb;
 using Microsoft.Data.SqlClient;
 using RegexCheck;
+using System.Data;
 using System.Text.RegularExpressions;
 
 namespace Betacomio_Project.RemPass
@@ -39,9 +40,9 @@ namespace Betacomio_Project.RemPass
             try
             {
                 connectDB(connect.ConnectDb());
-                string Em = email;
+               
                 SqlCommand sql = sqlConnection.CreateCommand();
-                sql.CommandText = $"INSERT INTO [dbo].[RememberPass](id , email ,ssKey)VALUES ({Em},{key}) ";
+                sql.CommandText = $"INSERT INTO [dbo].[RememberPass]  email ,ssKey VALUES ( {email},{key} )  ";
                 sql.ExecuteNonQuery();
               
             }
@@ -55,17 +56,65 @@ namespace Betacomio_Project.RemPass
 
         }
 
-        public void ChecKey()
+        public bool ChecKey(SingleTonConnectDB connection , int codice)
         {
+            
+            connectDB(connection.ConnectDb());
+            SqlCommand sql = sqlConnection.CreateCommand();
+            sql.CommandType = System.Data.CommandType.StoredProcedure;
+            sql.CommandText = "[dbo].[Checkey]";
+            sql.Parameters.AddWithValue("@key",codice);
+            SqlDataReader sqlData = sql.ExecuteReader();
+            if (sqlData.HasRows == true)
+            {
+                
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("il codice inserito non esiste");
+            }
 
+            return false;
         }
-        public void dropKey()
+        public bool dropKey(SingleTonConnectDB connection , int codice)
         {
-
+            try
+            {
+                connectDB(connection.ConnectDb());
+                SqlCommand sql = sqlConnection.CreateCommand();
+                sql.CommandText = $"delete from dbo.RememberPass where ssKey = {codice} ";
+                sql.ExecuteNonQuery();
+                connection.Dispose();
+                return true;
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine("Errore nel metodo DropKey" + err.Message);
+                return false;
+            }
+          
         }
-        public void GenerateNewPassWithSaltHsh()
+        public bool GenerateNewPassWithSaltHsh(SingleTonConnectDB connection , string password , string email)
         {
-
+            try
+            {
+                RegexCh regex = new RegexCh();
+                var NewPassHash = regex.EncryptSalt(password);
+                connectDB(connection.ConnectDb());
+                SqlCommand sql = sqlConnection.CreateCommand();
+                sql.CommandText = $"UPDATE [dbo].[UserCredentials] SET [Password_Hash] = {NewPassHash.Key} , [Password_Salt] = {NewPassHash.Value} where Email = {email}";
+                sql.ExecuteNonQuery();
+                connection.Dispose();
+                return true;
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine("errore nel metodo GenerateNePassHash");
+                return false;
+              
+            }
+          
         }
     }
 }

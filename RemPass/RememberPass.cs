@@ -1,6 +1,8 @@
 ﻿using Betacomio_Project.ConnectDb;
-
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.CodeAnalysis.Elfie.Model.Strings;
 using RegexCheck;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -66,18 +68,38 @@ namespace Betacomio_Project.RemPass
         }
        
         [HttpPost]
-        public void Post2(Remember value)
+        [Route("key/[controller]")]
+        public IActionResult Post2(CodiceRemember value) //IACTIONRESULT si aspetta una risposta ad una chiamata -- 
         {
+            string resp = "operazione effettuata con successo";
             try
             {
-
-
+                if (value.codice == null && value.password == null)
+                {
+                   
+                    return BadRequest();
+                }
+                LogicRemember logic = new LogicRemember(_connect);
+                bool CheckCode =  logic.ChecKey(_connect , value.codice);
+                if (CheckCode == true){ Console.WriteLine("errore nel metodo Checkey"); }
+                bool removeCodeDb = logic.dropKey(_connect , value.codice);
+                bool GeneratPass = logic.GenerateNewPassWithSaltHsh(_connect , value.password, value.email);
+                if (CheckCode == true && removeCodeDb == true && GeneratPass == true)
+                {
+                    
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
 
             }
-            catch (Exception)
+            catch (Exception err)
             {
 
-                throw;
+                
+                return BadRequest();
             }
 
         }
