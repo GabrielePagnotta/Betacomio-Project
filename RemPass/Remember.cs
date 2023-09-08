@@ -9,7 +9,8 @@ namespace Betacomio_Project.RemPass
     {
       
         public string email { get; set; }
-
+     
+        
       
     }
 }
