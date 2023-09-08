@@ -580,7 +580,28 @@ namespace RegexCheck
 
 
         }
+        public bool ExistUser(SingleTonConnectDB connect , string email)
+        {
+            bool ok = false;
+            try
+            {
+                connectDB(connect.ConnectDb());
+                SqlCommand sql = sqlConnection.CreateCommand();
+                sql.CommandType = System.Data.CommandType.StoredProcedure;
+                sql.CommandText = "CheckUsername";
+                sql.Parameters.AddWithValue("@email", email);
+                sql.ExecuteNonQuery();
+                connect.Dispose();
+                return ok = true;
+            }
+            catch (Exception err)
+            {
 
+                Console.WriteLine("errore nel metodo ExistUser" + err.Message);
+                return ok = false;
+            }
+            
+        }
 
     }
 

@@ -38,18 +38,21 @@ namespace Betacomio_Project.RemPass
         {
             try
             {
-             
-
+                connectDB(connect.ConnectDb());
+                string Em = email;
                 SqlCommand sql = sqlConnection.CreateCommand();
-                sql.CommandText = $"INSERT INTO [dbo].[RememberPass]\r\n  ([email]\r\n ,[ssKey])\r\n VALUES\r\n  ({email}\r\n ,{key}) ";
+                sql.CommandText = $"INSERT INTO [dbo].[RememberPass](id , email ,ssKey)VALUES ({Em},{key}) ";
                 sql.ExecuteNonQuery();
+              
             }
             catch (Exception err)
             {
 
                 Console.WriteLine("errore nel metodo SAVEKEY  " + err.Message);
+                
             }
-            
+            finally { connect.Dispose(); }
+
         }
 
         public void ChecKey()

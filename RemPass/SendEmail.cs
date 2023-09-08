@@ -9,7 +9,7 @@ namespace Betacomio_Project.RemPass
 
 
 
-        public int CreateTestMessage2(SingleTonConnectDB connect, string email)
+        public int CreateTestMessage2( string email)
         {
             var numRand = new Random().Next(); //creo un codice random 
             var url = "http://localhost:4200/About_us"; //url link paginna 

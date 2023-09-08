@@ -45,10 +45,11 @@ namespace Betacomio_Project.RemPass
                     BadRequest(400);
                     
                 }
+                
                 if (_Regex.ExistUser(_connect, value.email) == true)
                 {
                     SendEmail send = new SendEmail();
-                    int key = send.CreateTestMessage2(_connect, value.email);
+                    int key = send.CreateTestMessage2( value.email);
                     LogicRemember logic = new LogicRemember(_connect);
                     logic.SaveKey(_connect , value.email, key);
 
