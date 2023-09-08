@@ -30,7 +30,7 @@ namespace Betacomio_Project.RemPass
                     Body = body
                 };
                 mailmessage.To.Add(email);
-                client.Send(mailmessage); // inserisco il corpo del messaggio 
+                //client.Send(mailmessage); // inserisco il corpo del messaggio 
                
                 Console.WriteLine("Sent");
                 return numRand;
