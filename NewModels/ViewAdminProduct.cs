@@ -25,15 +25,9 @@ public partial class ViewAdminProduct
 
     public decimal? Weight { get; set; }
 
-    public string? WarrantyPeriod { get; set; }
-
-    public string? Material { get; set; }
-
     public string Description { get; set; } = null!;
 
     public byte[]? ThumbnailPhoto { get; set; }
-
-    public string? CatalogDescription { get; set; }
 
     public string Culture { get; set; } = null!;
 

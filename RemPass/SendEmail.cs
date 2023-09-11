@@ -13,13 +13,13 @@ namespace Betacomio_Project.RemPass
         {
             var numRand = new Random().Next(); //creo un codice random 
             var url = "http://localhost:4200/confirmpassword"; //url link paginna 
-            string body = $"<p>Clicca <a href=\"{url}\">qui</a> per visitare il sito. \n inserisci questo codici per la reimpostazione della password {numRand}</p>"; //corpo del messaggio
+            string body = $"<p>Clicca <a href=\"{url}\">qui</a> per visitare il sito. \n inserisci questo codice per la reimpostazione della password {numRand}</p>"; //corpo del messaggio
             try
             {
                 Console.WriteLine(numRand);
                 var client = new SmtpClient("sandbox.smtp.mailtrap.io", 2525) //richiamo il mio client ed inserisco SMTP e la porta 
                 {
-                    Credentials = new NetworkCredential("660652b60f3638", "d796f412450a6c"), // passo le mie credenziali 
+                    Credentials = new NetworkCredential("4db141333c7803", "a2c05258fdf3ed"), // passo le mie credenziali 
                     EnableSsl = true // va sempre a true 
                 };
                 var mailmessage = new MailMessage // costruisco dati della mail da inviare
@@ -30,7 +30,7 @@ namespace Betacomio_Project.RemPass
                     Body = body
                 };
                 mailmessage.To.Add(email);
-                //client.Send(mailmessage); // inserisco il corpo del messaggio 
+                client.Send(mailmessage); // inserisco il corpo del messaggio 
                
                 Console.WriteLine("Sent");
                 return numRand;

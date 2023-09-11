@@ -1,4 +1,5 @@
 ﻿using Betacomio_Project.ConnectDb;
+using Betacomio_Project.RemPass;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -7,17 +8,17 @@ using RegexCheck;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Betacomio_Project.RemPass
+namespace Betacomio_Project.ControllersBeta
 {
-  
+
     [Route("api/[controller]")]
     [ApiController]
     public class RememberPass : ControllerBase
     {
         private readonly SingleTonConnectDB _connect;
-        
+
         private readonly RegexCh _Regex;
-        public RememberPass(SingleTonConnectDB connnect , RegexCh reg)
+        public RememberPass(SingleTonConnectDB connnect, RegexCh reg)
         {
             _connect = connnect;
             _Regex = reg;
@@ -38,25 +39,25 @@ namespace Betacomio_Project.RemPass
 
         // POST api/<RememberPass>
         [HttpPost]
-        public void Post( Remember value)
+        public void Post(Remember value)
         {
             try
             {
                 if (value == null)
                 {
                     BadRequest(400);
-                    
+
                 }
-                
+
                 if (_Regex.ExistUser(_connect, value.email) == true)
                 {
                     SendEmail send = new SendEmail();
-                    int key = send.CreateTestMessage2( value.email);
+                    int key = send.CreateTestMessage2(value.email);
                     LogicRemember logic = new LogicRemember(_connect);
-                    logic.SaveKey(_connect , value.email, key);
+                    logic.SaveKey(_connect, value.email, key);
 
                 }
-                
+
 
             }
             catch (Exception)
@@ -64,9 +65,9 @@ namespace Betacomio_Project.RemPass
 
                 throw;
             }
-           
+
         }
-       
+
         [HttpPost]
         [Route("key/[controller]")]
         public IActionResult Post2(CodiceRemember value) //IACTIONRESULT si aspetta una risposta ad una chiamata -- 
@@ -76,17 +77,17 @@ namespace Betacomio_Project.RemPass
             {
                 if (value.codice == null && value.password == null)
                 {
-                   
+
                     return BadRequest();
                 }
                 LogicRemember logic = new LogicRemember(_connect);
-                bool CheckCode =  logic.ChecKey(_connect , value.codice);
-                if (CheckCode == true){ Console.WriteLine("errore nel metodo Checkey"); }
-                bool removeCodeDb = logic.dropKey(_connect , value.codice);
-                bool GeneratPass = logic.GenerateNewPassWithSaltHsh(_connect , value.password, value.email);
+                bool CheckCode = logic.ChecKey(_connect, value.codice);
+                if (CheckCode == true) { Console.WriteLine("errore nel metodo Checkey"); }
+                bool removeCodeDb = logic.dropKey(_connect, value.codice);
+                bool GeneratPass = logic.GenerateNewPassWithSaltHsh(_connect, value.password, value.email);
                 if (CheckCode == true && removeCodeDb == true && GeneratPass == true)
                 {
-                    
+
                     return Ok();
                 }
                 else
@@ -98,7 +99,7 @@ namespace Betacomio_Project.RemPass
             catch (Exception err)
             {
 
-                
+
                 return BadRequest();
             }
 

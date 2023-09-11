@@ -42,7 +42,7 @@ namespace Betacomio_Project.RemPass
                 connectDB(connect.ConnectDb());
                
                 SqlCommand sql = sqlConnection.CreateCommand();
-                sql.CommandText = $"INSERT INTO [dbo].[RememberPass]  email ,ssKey VALUES ( {email},{key} )  ";
+                sql.CommandText = $"";
                 sql.ExecuteNonQuery();
               
             }

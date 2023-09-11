@@ -44,7 +44,7 @@ namespace Betacomio_Project.ControllersBeta
                     RegexCh UserData = new RegexCh();
                     var datUsers = UserData.myProfileLogin(_connectDB, user.Identity.Name);
 
-                    users.Add(new LoginSchem(user.Identity.Name, token1, datUsers[0].ToString(), datUsers[1], datUsers[2], datUsers[3], datUsers[4], datUsers[6]));
+                    users.Add(new LoginSchem(user.Identity.Name, token1, datUsers[0].ToString(), datUsers[1], datUsers[2], datUsers[3], datUsers[4], datUsers[6], datUsers[7]));
 
 
 

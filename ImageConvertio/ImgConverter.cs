@@ -53,7 +53,44 @@ namespace ImageConvertio
             }
 
         }
+
+
+        public byte[] ConvertImageToByteArray(Image image)
+        {
+
+            if (image != null)
+            {
+                // Utilizza il metodo CopyImageToByteArray per convertire l'immagine in un array di byte
+                byte[] byteArray = CopyImageToByteArray(image);
+
+                image.Dispose();
+
+                return byteArray;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void ConvertByteArrayToHexString(byte[] byteArray)
+        {
+
+            try
+            {
+
+                string hexadecimalString = BitConverter.ToString(byteArray).Replace("-", "");
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Errore durante conversione: " + ex.Message);
+            }
+
+
+        }
     }
 }
-    
+
 

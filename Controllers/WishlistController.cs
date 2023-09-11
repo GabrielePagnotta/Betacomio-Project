@@ -24,13 +24,15 @@ namespace Betacomio_Project.Controllers
 
         // GET: api/Wishlist
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Wishlist>>> GetWishlists()
+        public async Task<ActionResult<IEnumerable<Wishlist>>> GetWishlists([FromQuery] int userid)
         {
           if (_context.Wishlists == null)
           {
               return NotFound();
           }
-            return await _context.Wishlists.ToListAsync();
+            return await _context.Wishlists
+                        .Where(el => el.UserId == userid)
+                        .Include(el => el.Product).Include(el => el.User).ToListAsync();
         }
 
         // GET: api/Wishlist/5
