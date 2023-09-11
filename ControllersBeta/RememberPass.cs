@@ -70,7 +70,7 @@ namespace Betacomio_Project.ControllersBeta
 
         [HttpPost]
         [Route("key/[controller]")]
-        public IActionResult Post2(CodiceRemember value) //IACTIONRESULT si aspetta una risposta ad una chiamata -- 
+        public async Task<IActionResult> Post2(CodiceRemember value) //IACTIONRESULT si aspetta una risposta ad una chiamata -- 
         {
             string resp = "operazione effettuata con successo";
             try
@@ -80,11 +80,15 @@ namespace Betacomio_Project.ControllersBeta
 
                     return BadRequest();
                 }
+                
                 LogicRemember logic = new LogicRemember(_connect);
-                bool CheckCode = logic.ChecKey(_connect, value.codice);
-                if (CheckCode == true) { Console.WriteLine("errore nel metodo Checkey"); }
-                bool removeCodeDb = logic.dropKey(_connect, value.codice);
-                bool GeneratPass = logic.GenerateNewPassWithSaltHsh(_connect, value.password, value.email);
+                bool CheckCode =  logic.ChecKey(_connect , value.codice);
+                if (CheckCode == true){ Console.WriteLine("errore nel metodo Checkey"); }
+                
+                 bool GeneratPass = logic.GenerateNewPassWithSaltHsh(_connect , value.password, value.email);
+                  var removeCodeDb =  await logic.dropKey(_connect, value.codice);
+                
+                    _connect.Dispose();
                 if (CheckCode == true && removeCodeDb == true && GeneratPass == true)
                 {
 
