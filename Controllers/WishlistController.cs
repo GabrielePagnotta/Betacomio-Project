@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Betacomio_Project.NewModels;
 using System.Text.Json.Nodes;
 using Newtonsoft.Json;
+using NLog;
 
 namespace Betacomio_Project.Controllers
 {
@@ -16,6 +17,7 @@ namespace Betacomio_Project.Controllers
     public class WishlistController : ControllerBase
     {
         private readonly BetacomioCyclesContext _context;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public WishlistController(BetacomioCyclesContext context)
         {
@@ -26,13 +28,27 @@ namespace Betacomio_Project.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Wishlist>>> GetWishlists([FromQuery] int userid)
         {
-          if (_context.Wishlists == null)
-          {
-              return NotFound();
-          }
-            return await _context.Wishlists
-                        .Where(el => el.UserId == userid)
-                        .Include(el => el.Product).Include(el => el.User).ToListAsync();
+            try
+            {
+                if (_context.Wishlists == null)
+                {
+                    return NotFound();
+                }
+                return await _context.Wishlists
+                            .Where(el => el.UserId == userid)
+                            .Include(el => el.Product).Include(el => el.User).ToListAsync();
+            }
+
+            catch (Exception ex)
+            {
+                logger.WithProperty("ErrorCode", ex.HResult)
+                   .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                   .Error("{Message}", ex.Message);
+
+                return BadRequest("Errore durante lettura dati wishlist");
+
+            }
+
         }
 
         // GET: api/Wishlist/5

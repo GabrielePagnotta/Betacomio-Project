@@ -10,6 +10,7 @@ using Betacomio_Project.ConnectDb;
 using RegexCheck;
 using Microsoft.AspNetCore.Authorization;
 using Betacomio_Project.BusinessLogic;
+using NLog;
 
 namespace Betacomio_Project.ControllersBeta
 {
@@ -21,6 +22,8 @@ namespace Betacomio_Project.ControllersBeta
         private readonly AdminLogContext _context;
         private readonly SingleTonConnectDB _connession;
         private readonly RegexCh _regex;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
 
         public UserCredentialsController(AdminLogContext context, SingleTonConnectDB connession, RegexCh regex)
         {
@@ -33,22 +36,48 @@ namespace Betacomio_Project.ControllersBeta
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserCredential>>> GetUserCredentials()
         {
-            if (_context.UserCredentials == null)
+            try
             {
-                return NotFound();
+                if (_context.UserCredentials == null)
+                {
+                    return NotFound();
+                }
+                return await _context.UserCredentials.ToListAsync();
             }
-            return await _context.UserCredentials.ToListAsync();
+            catch (Exception ex)
+            {
+                logger.WithProperty("ErrorCode", ex.HResult)
+                         .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                         .Error("{Message}", ex.Message);
+                return BadRequest("errore nella lettura degli utenti-log");
+            }
+          
         }
 
         // GET: api/UserCredentials/5
         [HttpGet("{id}")]
         public async Task<ActionResult<UserCredential>> GetUserCredential(int id)
         {
+
             if (_context.UserCredentials == null)
             {
                 return NotFound();
             }
-            var userCredential = await _context.UserCredentials.FindAsync(id);
+
+            UserCredential userCredential;
+
+            try
+            {
+               userCredential = await _context.UserCredentials.FindAsync(id);
+            }
+            catch (Exception ex)
+            {
+                logger.WithProperty("ErrorCode", ex.HResult)
+                                        .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                                        .Error("{Message}", ex.Message);
+                return BadRequest("errore nella lettura degli utenti-log 2");
+            }
+        
 
             if (userCredential == null)
             {

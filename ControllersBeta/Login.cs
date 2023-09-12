@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
+using NLog;
 using RegexCheck;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
@@ -20,6 +21,8 @@ namespace Betacomio_Project.ControllersBeta
     {
         private readonly SingleTonConnectDB _connectDB;
         private readonly AdminLogContext logContext;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public Login(SingleTonConnectDB connectDB, AdminLogContext context)
         {
             _connectDB = connectDB;
@@ -53,14 +56,19 @@ namespace Betacomio_Project.ControllersBeta
                 }
                 else
                 {
-                    throw new Exception("utente non auenticato prova a rifare la login ");
+                    throw new Exception("utente non auenticato, prova a rifare la login ");
                 }
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
-                Console.WriteLine("errore in fase di autenticazione " + "  " + err.Message + "  " + err.Data);
+                Console.WriteLine("errore in fase di autenticazione " + "  " + ex.Message + "  " + ex.Data);
+                
+                logger.WithProperty("ErrorCode", ex.HResult)
+                   .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                   .Error("{Message}", ex.Message);
 
             }
+
             List<LoginSchem> empty = new List<LoginSchem>();
             return empty;
         }

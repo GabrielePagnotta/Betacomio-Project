@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.CodeAnalysis.Elfie.Model.Strings;
+using NLog;
 using RegexCheck;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -16,8 +17,9 @@ namespace Betacomio_Project.ControllersBeta
     public class RememberPass : ControllerBase
     {
         private readonly SingleTonConnectDB _connect;
-
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly RegexCh _Regex;
+
         public RememberPass(SingleTonConnectDB connnect, RegexCh reg)
         {
             _connect = connnect;
@@ -60,10 +62,12 @@ namespace Betacomio_Project.ControllersBeta
 
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                logger.WithProperty("ErrorCode", ex.HResult)
+                   .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                   .Error("{Message}", ex.Message);
             }
 
         }
@@ -100,10 +104,12 @@ namespace Betacomio_Project.ControllersBeta
                 }
 
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
 
-
+                logger.WithProperty("ErrorCode", ex.HResult)
+                   .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                   .Error("{Message}", ex.Message);
                 return BadRequest();
             }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using NLog;
 
 namespace Betacomio_Project.ConnectDb
 {
@@ -7,6 +8,7 @@ namespace Betacomio_Project.ConnectDb
         SqlConnection conn = new SqlConnection();
         private static SingleTonConnectDB _instance;
         private string? strinConn;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private SingleTonConnectDB() { }
 
@@ -46,6 +48,10 @@ namespace Betacomio_Project.ConnectDb
             {
 
                 Console.WriteLine($"si è verificato un errore : {ex.Message}");
+
+                logger.WithProperty("ErrorCode", ex.HResult)
+                  .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                  .Error("{Message}", ex.Message);
 
             }
 

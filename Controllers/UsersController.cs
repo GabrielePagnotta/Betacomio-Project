@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using RegexCheck;
 using Microsoft.AspNetCore.Authorization;
 using Betacomio_Project.NewModels;
+using NLog;
 
 namespace Betacomio_Project.Controllers
 {
@@ -21,6 +22,7 @@ namespace Betacomio_Project.Controllers
     {
         private readonly BetacomioCyclesContext _context;
         private readonly SingleTonConnectDB _connession;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public UsersController(BetacomioCyclesContext context , SingleTonConnectDB connession)
         {
@@ -48,8 +50,23 @@ namespace Betacomio_Project.Controllers
           {
               return NotFound();
           }
-            var user = await _context.Users.FindAsync(id);
 
+            User user = null;
+
+            try
+            {
+                user = await _context.Users.FindAsync(id);
+            }
+            catch (Exception ex)
+            {
+
+                logger.WithProperty("ErrorCode", ex.HResult)
+                .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                .Error("{Message}", ex.Message);
+
+                return BadRequest("Errore durante lettura utenti");
+            }
+            
             if (user == null)
             {
                 return NotFound();

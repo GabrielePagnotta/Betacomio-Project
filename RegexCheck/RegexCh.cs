@@ -14,14 +14,17 @@ using System.Text.RegularExpressions;
 using System.Drawing;
 using Microsoft.CodeAnalysis;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using NLog;
 
 namespace RegexCheck
 {
     public class RegexCh
     {
         SqlConnection sqlConnection = new SqlConnection();
-        
-        
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
+
+
         public void connectDB(string connection)
         {
             try
@@ -119,6 +122,9 @@ namespace RegexCheck
             {
 
                 Console.WriteLine("errore nel metodo EcryptSalt:" + ex.Message);
+                logger.WithProperty("ErrorCode", ex.HResult)
+                       .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                       .Error("{Message}", ex.Message);
             }
 
 

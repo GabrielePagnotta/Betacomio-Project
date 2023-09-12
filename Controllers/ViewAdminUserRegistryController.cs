@@ -2,6 +2,7 @@
 using Betacomio_Project.NewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NLog;
 
 namespace Betacomio_Project.Controllers
 {
@@ -10,6 +11,8 @@ namespace Betacomio_Project.Controllers
     public class ViewAdminUserRegistryController : ControllerBase
     {
         private readonly BetacomioCyclesContext _context;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
 
 
         public ViewAdminUserRegistryController(BetacomioCyclesContext context)
@@ -25,7 +28,22 @@ namespace Betacomio_Project.Controllers
             {
                 return NotFound();
             }
-            return await _context.ViewAdminUserRegistries.ToListAsync();
+
+            List<ViewAdminUserRegistry> userRegistry;
+            try
+            {
+                userRegistry = await _context.ViewAdminUserRegistries.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                logger.WithProperty("ErrorCode", ex.HResult)
+                        .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                        .Error("{Message}", ex.Message);
+
+                return BadRequest("Errore durante lettura dati view AdminUserRegistries");
+            }
+
+            return userRegistry;
         }
 
         [HttpGet("{id}")]
@@ -35,14 +53,28 @@ namespace Betacomio_Project.Controllers
             {
                 return NotFound();
             }
-            var userRegistry = await _context.ViewAdminUserRegistries.Where(val => val.UserId == id).FirstAsync();
 
-            if (userRegistry == null)
+            ViewAdminUserRegistry userRegistrysingle;
+            try
+            {
+                userRegistrysingle = await _context.ViewAdminUserRegistries.Where(val => val.UserId == id).FirstAsync();
+            }
+            catch(Exception ex)
+            {
+                logger.WithProperty("ErrorCode", ex.HResult)
+                    .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                    .Error("{Message}", ex.Message);
+
+                return BadRequest("Errore durante lettura dati view AdminUserRegistries 2");
+            }
+            
+
+            if (userRegistrysingle == null)
             {
                 return NotFound();
             }
 
-            return userRegistry;
+            return userRegistrysingle;
         }
 
 

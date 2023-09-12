@@ -12,6 +12,7 @@ using Betacomio_Project.LogModels;
 using Microsoft.Data.SqlClient;
 using Betacomio_Project.ConnectDb;
 using RegexCheck;
+using NLog;
 
 namespace Betacomio_Project.ControllersBeta
 {
@@ -22,6 +23,8 @@ namespace Betacomio_Project.ControllersBeta
         private readonly AdminLogContext _context;
         private readonly SingleTonConnectDB _db;
         private readonly RegexCh _regex;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         SqlConnection sqlConnection = new SqlConnection();
 
         public WishlistTempsController(AdminLogContext context, SingleTonConnectDB db, RegexCh regex)
@@ -34,6 +37,7 @@ namespace Betacomio_Project.ControllersBeta
         [HttpGet]
         public async Task<ActionResult<IEnumerable<WishlistTemp>>> GetWishlistTemps()
         {
+
             if (_context.WishlistTemps == null)
             {
                 return NotFound();
@@ -105,15 +109,21 @@ namespace Betacomio_Project.ControllersBeta
 
 
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
                 if (WishlistTempExists(wishItem.UserId))
                 {
+                    logger.WithProperty("ErrorCode", ex.HResult)
+                        .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                        .Error("{Message}", ex.Message);
+
                     return Conflict();
                 }
                 else
                 {
-                    throw;
+                    logger.WithProperty("ErrorCode", ex.HResult)
+                        .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                        .Error("{Message}", ex.Message);
                 }
             }
 

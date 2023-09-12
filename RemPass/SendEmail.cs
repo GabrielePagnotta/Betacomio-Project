@@ -1,12 +1,14 @@
 ﻿using System.Net.Mail;
 using System.Net;
 using Betacomio_Project.ConnectDb;
+using NLog;
 
 namespace Betacomio_Project.RemPass
 {
     public class SendEmail
     {
 
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
 
         public int CreateTestMessage2( string email)
@@ -35,10 +37,13 @@ namespace Betacomio_Project.RemPass
                 Console.WriteLine("Sent");
                 return numRand;
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
 
-                Console.WriteLine("errore " + err.Message);
+                Console.WriteLine("errore " + ex.Message);
+                logger.WithProperty("ErrorCode", ex.HResult)
+                       .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                       .Error("{Message}", ex.Message);
                 return 0;
             }
 

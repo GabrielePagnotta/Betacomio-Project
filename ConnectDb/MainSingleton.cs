@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Data.SqlClient;
+using NLog;
 
 namespace Betacomio_Project.ConnectDb
 {
@@ -9,6 +10,8 @@ namespace Betacomio_Project.ConnectDb
         private static  MainSingleton instance;
         private string connectionString; 
         private static readonly object _lock = new object();
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
 
         private MainSingleton() { }
         public MainSingleton(string connectionString)
@@ -47,8 +50,11 @@ namespace Betacomio_Project.ConnectDb
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"si è verificato un errore : {ex.Message}");
 
-                Console.WriteLine($"si è verificato un errore durante la connessione : {ex.Message}");
+                logger.WithProperty("ErrorCode", ex.HResult)
+                  .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())  
+                  .Error("{Message}", ex.Message);
 
             }
 

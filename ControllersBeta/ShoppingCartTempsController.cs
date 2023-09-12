@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Betacomio_Project.LogModels;
 using RegexCheck;
 using Betacomio_Project.ConnectDb;
+using NLog;
 
 namespace Betacomio_Project.ControllersBeta
 {
@@ -17,6 +18,8 @@ namespace Betacomio_Project.ControllersBeta
     {
         private readonly AdminLogContext _context;
         private readonly RegexCh _regex;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
 
         public ShoppingCartTempsController(AdminLogContext context, RegexCh regex)
         {
@@ -102,15 +105,20 @@ namespace Betacomio_Project.ControllersBeta
                 _regex.PassShoppingCartData(connection, shoppingCartItem.ProductId, shoppingCartItem.UserId);
                 
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
                 if (ShoppingCartTempExists(shoppingCartItem.UserId))
                 {
+                    logger.WithProperty("ErrorCode", ex.HResult)
+                           .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                           .Error("{Message}", ex.Message);
                     return Conflict();
                 }
                 else
                 {
-                    throw;
+                    logger.WithProperty("ErrorCode", ex.HResult)
+                            .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                            .Error("{Message}", ex.Message);
                 }
             }
 

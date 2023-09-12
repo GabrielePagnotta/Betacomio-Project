@@ -5,6 +5,7 @@ using Betacomio_Project.NewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NLog;
 using RegexCheck;
 
 namespace Betacomio_Project.Controllers
@@ -16,6 +17,8 @@ namespace Betacomio_Project.Controllers
     {
         private readonly BetacomioCyclesContext _context;
         private readonly RegexCh _regex;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
 
 
         public ViewUserProductsController(BetacomioCyclesContext context,  RegexCh regex)
@@ -28,17 +31,35 @@ namespace Betacomio_Project.Controllers
         [HttpGet("GetUserProducts")]
         public async Task<ActionResult<IEnumerable<ViewUserProduct>>> GetUserProducts()
         {
-            if (_context.ViewUserProducts == null)
+            List<ViewUserProduct> viewUserProducts;
+
+            try
             {
-                return NotFound();
+                if (_context.ViewUserProducts == null)
+                {
+                    return NotFound();
+                }
+
+
+                viewUserProducts = await _context.ViewUserProducts.Take(100).ToListAsync();
             }
-            return await _context.ViewUserProducts.Take(100).ToListAsync();
+            catch (Exception ex)
+            {
+
+                logger.WithProperty("ErrorCode", ex.HResult)
+                    .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                    .Error("{Message}", ex.Message);
+
+                return BadRequest("Errore durante lettura dati view UserProducts");
+            }
+
+            return viewUserProducts;
+
         }
 
         [HttpGet("GetUserProductsByLanguage")]
         public async Task<ActionResult<IEnumerable<ViewUserProduct>>> GetUserProductsByLanguage(MainSingleton connectao, [FromQuery] int nationality)
         {
-
             try
             {
                 if (_context.ViewUserProducts == null)
@@ -48,11 +69,16 @@ namespace Betacomio_Project.Controllers
 
                 var productsByLanguage = await _regex.ProductsWithLanguage(connectao, nationality);
                 return Ok(productsByLanguage);
+                
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
-                // mettere Nlog
+
+                logger.WithProperty("ErrorCode", ex.HResult)
+                    .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                    .Error("{Message}", ex.Message);
+
+                return BadRequest("Errore durante lettura prodotti in lingua (View)");
             }
         }
 
@@ -75,8 +101,12 @@ namespace Betacomio_Project.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
-                // mettere Nlog
+
+                logger.WithProperty("ErrorCode", ex.HResult)
+                    .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                    .Error("{Message}", ex.Message);
+
+                return BadRequest("Errore durante lettura prodotti in lingua (View id)");
             }
 
         }

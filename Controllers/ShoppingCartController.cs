@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Betacomio_Project.NewModels;
+using NLog;
 
 namespace Betacomio_Project.Controllers
 {
@@ -14,6 +15,8 @@ namespace Betacomio_Project.Controllers
     public class ShoppingCartController : ControllerBase
     {
         private readonly BetacomioCyclesContext _context;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
 
         public ShoppingCartController(BetacomioCyclesContext context)
         {
@@ -28,10 +31,24 @@ namespace Betacomio_Project.Controllers
           {
               return NotFound();
           }
-            var shoppingCart = await _context.ShoppingCarts
+
+            List<ShoppingCart> shoppingCart = null;
+
+            try
+            {
+                shoppingCart = await _context.ShoppingCarts
                                      .Where(el => el.UserId == userid)
                                      .Include(el => el.Product).Include(el => el.User).ToListAsync();
-                                     
+            }
+            catch (Exception ex)
+            {
+
+                logger.WithProperty("ErrorCode", ex.HResult)
+                 .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                 .Error("{Message}", ex.Message);
+
+                return BadRequest("Errore durante lettura prodotti del carrello.");
+            }             
 
             return shoppingCart;
         }

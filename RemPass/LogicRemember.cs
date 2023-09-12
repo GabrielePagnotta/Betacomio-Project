@@ -1,5 +1,6 @@
 ﻿using Betacomio_Project.ConnectDb;
 using Microsoft.Data.SqlClient;
+using NLog;
 using RegexCheck;
 using System.Data;
 using System.Text.RegularExpressions;
@@ -11,6 +12,8 @@ namespace Betacomio_Project.RemPass
     {
         SqlConnection sqlConnection = new SqlConnection();
         private readonly SingleTonConnectDB _connect;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public LogicRemember(SingleTonConnectDB connect )
         {
             _connect = connect;
@@ -50,11 +53,14 @@ namespace Betacomio_Project.RemPass
                 sql.ExecuteNonQuery();
               
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
 
-                Console.WriteLine("errore nel metodo SAVEKEY  " + err.Message);
-                
+                Console.WriteLine("errore nel metodo SAVEKEY  " + ex.Message);
+                logger.WithProperty("ErrorCode", ex.HResult)
+                        .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                        .Error("{Message}", ex.Message);
+
             }
             finally { connect.Dispose(); }
 
@@ -62,7 +68,7 @@ namespace Betacomio_Project.RemPass
 
         public bool ChecKey(SingleTonConnectDB connection , int codice)
         {
-            
+          
             connectDB(connection.ConnectDb());
             SqlCommand sql = sqlConnection.CreateCommand();
             sql.CommandType = System.Data.CommandType.StoredProcedure;
@@ -99,9 +105,12 @@ namespace Betacomio_Project.RemPass
 
                 return Task.FromResult(true);
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
-                Console.WriteLine("Errore nel metodo DropKey" + err.Message);
+                Console.WriteLine("Errore nel metodo DropKey" + ex.Message);
+                logger.WithProperty("ErrorCode", ex.HResult)
+                        .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                        .Error("{Message}", ex.Message);
                 return Task.FromResult(false);
             }
           
@@ -123,9 +132,12 @@ namespace Betacomio_Project.RemPass
                 connection.Dispose();
                 return true;
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
                 Console.WriteLine("errore nel metodo GenerateNePassHash");
+                logger.WithProperty("ErrorCode", ex.HResult)
+                        .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                        .Error("{Message}", ex.Message);
                 return false;
               
             }

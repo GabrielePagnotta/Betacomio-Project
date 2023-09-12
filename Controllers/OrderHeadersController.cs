@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Betacomio_Project.NewModels;
+using NLog;
 
 namespace Betacomio_Project.Controllers
 {
@@ -14,6 +15,8 @@ namespace Betacomio_Project.Controllers
     public class OrderHeadersController : ControllerBase
     {
         private readonly BetacomioCyclesContext _context;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
 
         public OrderHeadersController(BetacomioCyclesContext context)
         {
@@ -22,13 +25,29 @@ namespace Betacomio_Project.Controllers
 
         // GET: api/OrderHeaders
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderHeader>>> GetOrderHeaders()
+        public async Task<ActionResult<IEnumerable<OrderHeader>>> GetOrderHeaders([FromQuery] int userid)
         {
           if (_context.OrderHeaders == null)
           {
               return NotFound();
           }
-            return await _context.OrderHeaders.ToListAsync();
+            List<OrderHeader> getOrders = null;
+            try
+            {
+                getOrders = await _context.OrderHeaders.Where(el => el.CustomerId == userid)
+                                            .Include(el => el.OrderDetails).ThenInclude(det => det.Product).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                logger.WithProperty("ErrorCode", ex.HResult)
+                    .WithProperty("ErrorClass", ex.TargetSite.DeclaringType.ToString())
+                    .Error("{Message}", ex.Message);
+
+                return BadRequest("Errore durante la lettura degli ordini.");
+            }
+
+            // Restituisci getOrders se tutto è andato bene
+            return getOrders;
         }
 
         // GET: api/OrderHeaders/5
