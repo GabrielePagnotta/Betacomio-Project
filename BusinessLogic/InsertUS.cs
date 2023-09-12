@@ -12,7 +12,7 @@ namespace Betacomio_Project.BusinessLogic
     public class InsertUS
     {
 
-        public void Usnew(UserCredential user)
+        public bool Usnew(UserCredential user)
         {
 			try
 			{
@@ -24,25 +24,24 @@ namespace Betacomio_Project.BusinessLogic
                 if (user.PasswordHash.IsNullOrEmpty()) { throw new Exception("Il Campo Password non può essere Null o Vuoto");}
 				Regex RegexPassword = new Regex(@"^(?=.*[!@#$%^&*()\-_=+[\]{}|\\;:'""<>,.?/~])\S{6,15}$");
                 if (RegexPassword.IsMatch(user.PasswordHash)){
-                    var PassSalt = regex.EncryptSalt(user.PasswordHash);
+                   var PassSalt = regex.EncryptSalt(user.PasswordHash);
 
                     user.PasswordHash = PassSalt.Key;
-                    user.PasswordSalt = PassSalt.Value;
+                   user.PasswordSalt = PassSalt.Value;
 				}
 				else { throw new Exception("La password inserita non rispecchia i parametri di base almeno un carattere SPECIALE e NUMERI"); };
-                user.BirthYear = null;
-                //if ( user.Phone != null)
-                //{
-                //    string? birth = user.BirthYear.ToString();
-                //    int? Phonw = user.Phone;
-                //    regex.checkNumOrDate(  Int32.Parse(birth) , Phonw.Value);
-                //}
-                
+               
+
+                if ( user.Phone != null)
+                {
+                   regex.checkNumOrDate(  user.BirthYear , user.Phone);
+                }
+                return true;
             }
 			catch (Exception err)
 			{
                 Console.WriteLine("Errore nel metodo di USnew : " + err.Message);
-               
+                return false;
 			}
 
         }

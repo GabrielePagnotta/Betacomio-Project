@@ -103,7 +103,7 @@ namespace Betacomio_Project.ControllersBeta
             if (existUser == true) { return BadRequest(404); }
 
             InsertUS insertUS = new InsertUS();
-            insertUS.Usnew(userCredential);
+            bool OkUsers =  insertUS.Usnew(userCredential);
             _context.UserCredentials.Add(userCredential);
              await _context.SaveChangesAsync();
 

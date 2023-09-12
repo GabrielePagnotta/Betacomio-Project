@@ -126,56 +126,49 @@ namespace RegexCheck
         }
 
 
-        public List<int> checkNumOrDate(int age, int phone = 0)
+        public bool checkNumOrDate(string age, string phone)
         {
-
-
+            
+            string reverse = string.Empty;
+            
+            foreach (var item in age.Split("/"))
+            {
+                
+                string[] years = item.Split("-");
+                Console.WriteLine(years);
+                reverse = years[2] + "/" + years[1] + "/" + years[0] ;
+            }
+            Console.WriteLine(reverse);
             try
             {
-                if (age == null) { age = 0; }
-                if (phone == null) { phone = 0; }
+                
+               
                 Regex regexAge = new Regex(@"^[0-9]{2}/[0-9]{2}/[0-9]{4}$");
-                if (regexAge.IsMatch(age.ToString()))
+                if (regexAge.IsMatch(reverse))
                 {
-                    if (age < 01 / 01 / 1950 || age > 01 / 01 / 2020)
-                    {
-                        throw new Exception("l'Età inserita non può essere minore del 01/01/1950 o magggiore di 01/01/2020");
-                    }
-                    else
-                    {
-
-                        string newAge = age.ToString();
-                        foreach (string item in newAge.Split("/"))
-                        {
-                            string data = item[0].ToString() + item[1].ToString();
-                            if (Int32.Parse(data) < 1 || Int32.Parse(data) > 31) { throw new Exception("il campo Giorno deve essere maggiore di 1 e non oltre il 31"); }
-                            string mounth2 = item[2].ToString() + item[3].ToString();
-                            if (Int32.Parse(mounth2) < 1 || Int32.Parse(mounth2) > 12) { throw new Exception("il campo del Mese deve essere maggiore di 1 e non oltre il 12"); }
-                            string years = item[4].ToString() + item[5].ToString() + item[6].ToString() + item[7].ToString();
-                            if (Int32.Parse(mounth2) < 1950 || Int32.Parse(mounth2) > 2020) { throw new Exception("il campo dell'anno deve essere maggiore di 2020 e non sotto il 1950"); }
-
-
-                        }
-
-                        List<int> days = new List<int>();
-                        days.Add(Int32.Parse(newAge));
-                        days.Add(phone);
-                        return days;
-                    }
+                    Console.WriteLine("ottimo");
+                }
+                else
+                {
+                   throw new Exception("errore nell'inserimento della data ");
                 }
 
+                if (phone == null || phone == "" || phone.Length > 12)
+                {
+                    throw new Exception("errone nell'inserimento del numero lunghezza numero cellulare troppo lungo");
+                }
 
-
-
+                return true;
 
             }
-            catch (Exception)
+            catch (Exception err)
             {
-
-                throw;
+                Console.WriteLine("Errore nel metodo per l'inserimento della data ed il numero");
+                
+                return false;
             }
-            List<int> allEmpty = new List<int>();
-            return allEmpty;
+         
+           
         }  // metodo da utilizzare con la data 
 
         public bool CheckAgeAndPhone(int age, int phone)
