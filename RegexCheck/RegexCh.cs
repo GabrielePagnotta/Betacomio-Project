@@ -137,6 +137,11 @@ namespace RegexCheck
                 string[] years = item.Split("-");
                 Console.WriteLine(years);
                 reverse = years[2] + "/" + years[1] + "/" + years[0] ;
+                if ( int.Parse(years[0]) < 1930 || int.Parse(years[0]) > 2005 )
+                {
+                    Console.WriteLine("errore la data inserita è minore del 1930 o maggiore del 2005");
+                    return false;
+                }
             }
             Console.WriteLine(reverse);
             try
