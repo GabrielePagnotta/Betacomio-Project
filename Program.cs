@@ -4,6 +4,7 @@ using Betacomio_Project.LogModels;
 
 using Betacomio_Project.NewModels;
 using FirstMVC.Auth;
+using ImageConvertio;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +41,9 @@ builder.Services.AddSingleton<MainSingleton>(option => new MainSingleton(strinCo
 
 //Utilizzo RegexCh come servizio
 builder.Services.AddScoped<RegexCh>();
+
+//Utilizzo ImgConverter come servizio
+builder.Services.AddScoped<ImgConverter>();
 
 builder.Services.AddControllers().AddJsonOptions(jsopt => jsopt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 

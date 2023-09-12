@@ -22,13 +22,16 @@ namespace Betacomio_Project.Controllers
 
         // GET: api/ShoppingCart
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ShoppingCart>>> GetShoppingCarts()
+        public async Task<ActionResult<IEnumerable<ShoppingCart>>> GetShoppingCarts([FromQuery] int userid)
         {
           if (_context.ShoppingCarts == null)
           {
               return NotFound();
           }
-            var shoppingCart = await _context.ShoppingCarts.Include(el => el.User).Include(el => el.Product).ToListAsync();
+            var shoppingCart = await _context.ShoppingCarts
+                                     .Where(el => el.UserId == userid)
+                                     .Include(el => el.Product).Include(el => el.User).ToListAsync();
+                                     
 
             return shoppingCart;
         }

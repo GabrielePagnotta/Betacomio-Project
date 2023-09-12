@@ -416,6 +416,7 @@ namespace RegexCheck
 
                             langProducts.Add(new ViewUserProduct
                             {
+                                ProductId = Convert.ToInt32(dr["ProductId"]),
                                 Name = dr["Name"].ToString(),
                                 ProductType = dr["ProductType"].ToString(),
                                 ModelType = dr["ModelType"].ToString(),
@@ -481,6 +482,7 @@ namespace RegexCheck
                             dati.Add(sqlData[4].ToString());
                             dati.Add(sqlData[5].ToString());
                             dati.Add(sqlData[6].ToString());
+                            dati.Add(sqlData[7].ToString());
                             return dati;
                         }
 

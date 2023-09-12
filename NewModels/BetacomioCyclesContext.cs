@@ -372,14 +372,12 @@ public partial class BetacomioCyclesContext : DbContext
                 .HasNoKey()
                 .ToView("View_AdminProducts");
 
-            entity.Property(e => e.CatalogDescription).HasColumnType("xml");
             entity.Property(e => e.Color).HasMaxLength(15);
             entity.Property(e => e.Culture)
                 .HasMaxLength(6)
                 .IsFixedLength();
             entity.Property(e => e.Description).HasMaxLength(400);
             entity.Property(e => e.ListPrice).HasColumnType("money");
-            entity.Property(e => e.Material).HasMaxLength(256);
             entity.Property(e => e.ModelType).HasMaxLength(50);
             entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
             entity.Property(e => e.Name).HasMaxLength(50);
@@ -388,7 +386,6 @@ public partial class BetacomioCyclesContext : DbContext
             entity.Property(e => e.ProductType).HasMaxLength(50);
             entity.Property(e => e.Size).HasMaxLength(5);
             entity.Property(e => e.StandardCost).HasColumnType("money");
-            entity.Property(e => e.WarrantyPeriod).HasMaxLength(256);
             entity.Property(e => e.Weight).HasColumnType("decimal(8, 2)");
         });
 

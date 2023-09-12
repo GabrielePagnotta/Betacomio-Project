@@ -27,14 +27,14 @@ namespace Betacomio_Project.Controllers
             return await _context.ViewAdminProducts.ToListAsync();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ViewAdminProduct>> GetAdminProductsByID(int id)
+        [HttpGet("{name}")]
+        public async Task<ActionResult<ViewAdminProduct>> GetAdminProductsByID(string name)
         {
             if (_context.ViewAdminProducts == null)
             {
                 return NotFound();
             }
-            var adminProduct = await _context.ViewAdminProducts.Where(val => val.ProductId == id).FirstAsync();
+            var adminProduct = await _context.ViewAdminProducts.Where(val => val.Name == name).FirstAsync();
 
             if (adminProduct == null)
             {

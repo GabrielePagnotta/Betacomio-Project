@@ -36,7 +36,7 @@ namespace Betacomio_Project.Controllers
         }
 
         [HttpGet("GetUserProductsByLanguage")]
-        public async Task<ActionResult<IEnumerable<ViewUserProduct>>> GetUserProductsByLanguage(MainSingleton connectao, int nationality)
+        public async Task<ActionResult<IEnumerable<ViewUserProduct>>> GetUserProductsByLanguage(MainSingleton connectao, [FromQuery] int nationality)
         {
 
             try
@@ -57,23 +57,29 @@ namespace Betacomio_Project.Controllers
         }
 
 
-        [HttpGet("{name}")]
-        public async Task<ActionResult<ViewUserProduct>> GetUserProductsByID(string name)
+        [HttpGet("{name}")]  
+        public async Task<ActionResult<ViewUserProduct>> GetUserProductsByID(MainSingleton connectao, string name, int nationality)  //dettaglio prodotto
         {
-            if (_context.ViewUserProducts == null)
+            try
             {
-                return NotFound();
-            }
-            var userProduct = await _context.ViewUserProducts.Where(val => val.Name == name).FirstAsync();
+                if (_context.ViewUserProducts == null)
+                {
+                    return NotFound();
+                }
 
-            if (userProduct == null)
+                var allProducts = await _regex.ProductsWithLanguage(connectao, nationality);
+                var prodDetail_language = allProducts.Where(val => val.Name == name).First();
+
+                return Ok(prodDetail_language);
+
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+                // mettere Nlog
             }
 
-            return userProduct;
         }
-
 
 
         private bool UserProductExists(string name)
