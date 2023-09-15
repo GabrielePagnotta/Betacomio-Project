@@ -43,13 +43,13 @@ public partial class AdminLogContext : DbContext
             entity.Property(e => e.ErrorTime).HasColumnType("datetime");
         });
 
+
         modelBuilder.Entity<ShoppingCartTemp>(entity =>
         {
-            entity.HasKey(e => e.UserId);
+            entity.HasKey(e => new { e.UserId, e.ProductId });
 
             entity.ToTable("ShoppingCartTemp");
 
-            entity.Property(e => e.UserId).ValueGeneratedNever();
             entity.Property(e => e.AddedDate).HasColumnType("datetime");
             entity.Property(e => e.Rowguid).HasColumnName("rowguid");
             entity.Property(e => e.TotalPrice).HasColumnType("money");
@@ -86,17 +86,13 @@ public partial class AdminLogContext : DbContext
 
             entity.ToTable("UserRequestsTemp");
 
-            entity.Property(e => e.RequestId)
-                .ValueGeneratedNever()
-                .HasColumnName("RequestID");
-            entity.Property(e => e.RequestBody)
-                .HasColumnType("text")
-                .HasColumnName("Request_Body");
-            entity.Property(e => e.RequestObject)
-                .HasMaxLength(150)
-                .HasColumnName("Request_Object");
+            entity.Property(e => e.RequestId).HasColumnName("RequestID");
+            entity.Property(e => e.Email).HasMaxLength(50);
+            entity.Property(e => e.Object).HasMaxLength(150);
             entity.Property(e => e.UserId).HasColumnName("UserID");
         });
+
+
 
         modelBuilder.Entity<WishlistTemp>(entity =>
         {
