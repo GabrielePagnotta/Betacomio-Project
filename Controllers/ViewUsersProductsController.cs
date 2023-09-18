@@ -41,7 +41,7 @@ namespace Betacomio_Project.Controllers
                 }
 
 
-                viewUserProducts = await _context.ViewUserProducts.Take(100).ToListAsync();
+                viewUserProducts = await _context.ViewUserProducts.ToListAsync();
             }
             catch (Exception ex)
             {

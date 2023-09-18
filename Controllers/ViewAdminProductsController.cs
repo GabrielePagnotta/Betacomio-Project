@@ -32,7 +32,7 @@ namespace Betacomio_Project.Controllers
 
             try
             {
-                helo = await _context.ViewAdminProducts.Take(145).ToListAsync();
+                helo = await _context.ViewAdminProducts.ToListAsync();
             }
             catch (Exception ex)
             {
