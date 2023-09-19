@@ -86,14 +86,8 @@ namespace Betacomio_Project.ControllersBeta
         [HttpPost]
         public async Task<ActionResult<OrderProxy>> PostOrderProxy([FromBody] OrderProxy orderProxy)
         {
-          if (_context.OrderProxies == null )
           {
-              return Problem("Nessun prodotto nel carrello");
           }
-            if (orderProxy.SubTotal == null || orderProxy.SubTotal == 0)
-            {
-                return Problem("Nessun prodotto nel carrello");
-            }
 
 
             _context.OrderProxies.Add(orderProxy);

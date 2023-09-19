@@ -46,6 +46,7 @@ public partial class BetacomioCyclesContext : DbContext
 
     public virtual DbSet<Wishlist> Wishlists { get; set; }
 
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Address>(entity =>
@@ -107,7 +108,6 @@ public partial class BetacomioCyclesContext : DbContext
 
             entity.HasOne(d => d.Product).WithMany(p => p.OrderDetails)
                 .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_OrderDetail_Products");
         });
 
@@ -289,7 +289,6 @@ public partial class BetacomioCyclesContext : DbContext
 
             entity.HasOne(d => d.Product).WithMany(p => p.ShoppingCarts)
                 .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__ShoppingC__Produ__2B0A656D");
 
             entity.HasOne(d => d.User).WithMany(p => p.ShoppingCarts)
@@ -446,7 +445,6 @@ public partial class BetacomioCyclesContext : DbContext
 
             entity.HasOne(d => d.Product).WithMany(p => p.Wishlists)
                 .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Wishlist__Produc__2739D489");
 
             entity.HasOne(d => d.User).WithMany(p => p.Wishlists)

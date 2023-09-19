@@ -28,8 +28,11 @@ public partial class OrderProxy
 
     public List<ResultCart> ResultCarr = new List<ResultCart>();
 
+    public decimal? TotalPrice { get; set; }
 
+    public string? Address { get; set; }
 
+    public string? AddressDetail { get; set; }
 
 }
 public class ResultCart
