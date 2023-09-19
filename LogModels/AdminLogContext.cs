@@ -14,6 +14,8 @@ public partial class AdminLogContext : DbContext
 
     public virtual DbSet<ErrorLog> ErrorLogs { get; set; }
 
+    public virtual DbSet<OrderProxy> OrderProxies { get; set; }
+
     public virtual DbSet<ShoppingCartTemp> ShoppingCartTemps { get; set; }
 
     public virtual DbSet<UserCredential> UserCredentials { get; set; }
@@ -41,6 +43,32 @@ public partial class AdminLogContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("ErrorOrigin_Method");
             entity.Property(e => e.ErrorTime).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<OrderProxy>(entity =>
+        {
+            entity.HasKey(e => e.GenericId);
+
+            entity.ToTable("OrderProxy");
+
+            entity.Property(e => e.GenericId).HasColumnName("GenericID");
+            entity.Property(e => e.Address).HasMaxLength(60);
+            entity.Property(e => e.AddressDetail).HasMaxLength(30);
+            entity.Property(e => e.AddressId).HasColumnName("AddressID");
+            entity.Property(e => e.City).HasMaxLength(30);
+            entity.Property(e => e.Country).HasMaxLength(50);
+            entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+            entity.Property(e => e.OrderDate).HasColumnType("date");
+            entity.Property(e => e.OrderDetailId).HasColumnName("OrderDetailID");
+            entity.Property(e => e.OrderId).HasColumnName("OrderID");
+            entity.Property(e => e.PostalCode)
+                .HasMaxLength(15)
+                .HasColumnName("Postal_Code");
+            entity.Property(e => e.ProductId).HasColumnName("ProductID");
+            entity.Property(e => e.Region).HasMaxLength(50);
+            entity.Property(e => e.SubTotal).HasColumnType("money");
+            entity.Property(e => e.TotalPrice).HasColumnType("money");
+            entity.Property(e => e.UnitPrice).HasColumnType("money");
         });
 
 
@@ -91,8 +119,6 @@ public partial class AdminLogContext : DbContext
             entity.Property(e => e.Object).HasMaxLength(150);
             entity.Property(e => e.UserId).HasColumnName("UserID");
         });
-
-
 
         modelBuilder.Entity<WishlistTemp>(entity =>
         {
