@@ -4,11 +4,28 @@ using System.Diagnostics;
 
 namespace Betacomio_Project.LogModels;
 
-public partial class OrderProxy
+public class OrderProxy
 {
     public int GenericId { get; set; }
 
-    public int? CustomerId { get; set; }
+    public UniqueData userUniqueData { get; set; }
+
+    public List<OrderDetailData> detailData { get; set; }
+
+}
+public class OrderDetailData
+{
+    //dati per ogni singolo prodotto
+    public int? ProductId { get; set; }
+    public short? OrderQty { get; set; }
+    public decimal? UnitPrice { get; set; }
+    public decimal? TotalPrice { get; set; }
+
+}
+
+public class UniqueData
+{
+    public int? CustomerId { get; set; }  //user id token
 
     public int? AddressId { get; set; }
 
@@ -24,24 +41,6 @@ public partial class OrderProxy
 
     public string? PostalCode { get; set; }
 
-    public decimal? SubTotal { get; set; }
+    public decimal? SubTotal { get; set; }  //totale carrello
 
-    public List<ResultCart> ResultCarr = new List<ResultCart>();
-
-    public decimal? TotalPrice { get; set; }
-
-    public string? Address { get; set; }
-
-    public string? AddressDetail { get; set; }
-
-}
-public class ResultCart
-{
-    public decimal? TotalPrice { get; set; }
-
-    public short? OrderQty { get; set; }
-
-    public int[]? ProductId { get; set; }
-
-    public decimal? UnitPrice { get; set; }
 }

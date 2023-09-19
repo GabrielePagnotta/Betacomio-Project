@@ -56,19 +56,6 @@ public partial class AdminLogContext : DbContext
             entity.ToTable("Order_Proxy");
 
             entity.Property(e => e.GenericId).HasColumnName("GenericID");
-            entity.Property(e => e.Address).HasMaxLength(60);
-            entity.Property(e => e.AddressDetail).HasMaxLength(30);
-            entity.Property(e => e.AddressId).HasColumnName("AddressID");
-            entity.Property(e => e.City).HasMaxLength(30);
-            entity.Property(e => e.Country).HasMaxLength(50);
-            entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
-          
-            entity.Property(e => e.PostalCode)
-                .HasMaxLength(15)
-                .HasColumnName("Postal_Code");
-      
-            entity.Property(e => e.Region).HasMaxLength(50);
-            entity.Property(e => e.SubTotal).HasColumnType("money");
        
         });
 

@@ -84,16 +84,14 @@ namespace Betacomio_Project.ControllersBeta
         // POST: api/OrderProxies
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<OrderProxy>> PostOrderProxy([FromBody] OrderProxy orderProxy)
+        public async Task<ActionResult<OrderProxy>> PostOrderProxy(OrderProxy orderproxy)
         {
-          {
-          }
+            
 
+            //_context.OrderProxies.Add(orderProxy);
+            //await _context.SaveChangesAsync();
 
-            _context.OrderProxies.Add(orderProxy);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetOrderProxy", new { id = orderProxy.GenericId }, orderProxy);
+            return Ok();
         }
 
         // DELETE: api/OrderProxies/5
