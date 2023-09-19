@@ -19,6 +19,7 @@ namespace Betacomio_Project.ControllersBeta
     [ApiController]
     public class Login : ControllerBase
     {
+       
         private readonly SingleTonConnectDB _connectDB;
         private readonly AdminLogContext logContext;
         private static Logger logger = LogManager.GetCurrentClassLogger();

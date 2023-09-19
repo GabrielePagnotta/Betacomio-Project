@@ -7,12 +7,17 @@ namespace Betacomio_Project.LogModels;
 public partial class AdminLogContext : DbContext
 {
 
+
     public AdminLogContext(DbContextOptions<AdminLogContext> options)
         : base(options)
     {
     }
 
     public virtual DbSet<ErrorLog> ErrorLogs { get; set; }
+
+    public virtual DbSet<OrderProxy> OrderProxies { get; set; }
+
+   
 
     public virtual DbSet<ShoppingCartTemp> ShoppingCartTemps { get; set; }
 
@@ -21,6 +26,7 @@ public partial class AdminLogContext : DbContext
     public virtual DbSet<UserRequestsTemp> UserRequestsTemps { get; set; }
 
     public virtual DbSet<WishlistTemp> WishlistTemps { get; set; }
+
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -43,6 +49,30 @@ public partial class AdminLogContext : DbContext
             entity.Property(e => e.ErrorTime).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<OrderProxy>(entity =>
+        {
+            entity.HasKey(e => e.GenericId);
+
+            entity.ToTable("Order_Proxy");
+
+            entity.Property(e => e.GenericId).HasColumnName("GenericID");
+            entity.Property(e => e.Address).HasMaxLength(60);
+            entity.Property(e => e.AddressDetail).HasMaxLength(30);
+            entity.Property(e => e.AddressId).HasColumnName("AddressID");
+            entity.Property(e => e.City).HasMaxLength(30);
+            entity.Property(e => e.Country).HasMaxLength(50);
+            entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+          
+            entity.Property(e => e.PostalCode)
+                .HasMaxLength(15)
+                .HasColumnName("Postal_Code");
+      
+            entity.Property(e => e.Region).HasMaxLength(50);
+            entity.Property(e => e.SubTotal).HasColumnType("money");
+       
+        });
+
+       
 
         modelBuilder.Entity<ShoppingCartTemp>(entity =>
         {
@@ -86,13 +116,17 @@ public partial class AdminLogContext : DbContext
 
             entity.ToTable("UserRequestsTemp");
 
-            entity.Property(e => e.RequestId).HasColumnName("RequestID");
-            entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.Object).HasMaxLength(150);
+            entity.Property(e => e.RequestId)
+                .ValueGeneratedNever()
+                .HasColumnName("RequestID");
+            entity.Property(e => e.RequestBody)
+                .HasColumnType("text")
+                .HasColumnName("Request_Body");
+            entity.Property(e => e.RequestObject)
+                .HasMaxLength(150)
+                .HasColumnName("Request_Object");
             entity.Property(e => e.UserId).HasColumnName("UserID");
         });
-
-
 
         modelBuilder.Entity<WishlistTemp>(entity =>
         {

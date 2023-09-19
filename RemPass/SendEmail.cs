@@ -21,7 +21,7 @@ namespace Betacomio_Project.RemPass
                 Console.WriteLine(numRand);
                 var client = new SmtpClient("sandbox.smtp.mailtrap.io", 2525) //richiamo il mio client ed inserisco SMTP e la porta 
                 {
-                    Credentials = new NetworkCredential("4db141333c7803", "a2c05258fdf3ed"), // passo le mie credenziali 
+                    Credentials = new NetworkCredential("660652b60f3638", "d796f412450a6c"), // passo le mie credenziali 
                     EnableSsl = true // va sempre a true 
                 };
                 var mailmessage = new MailMessage // costruisco dati della mail da inviare
