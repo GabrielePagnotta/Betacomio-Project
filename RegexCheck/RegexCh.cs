@@ -15,6 +15,8 @@ using System.Drawing;
 using Microsoft.CodeAnalysis;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using NLog;
+using Microsoft.SqlServer.Server;
+using Microsoft.AspNetCore.Mvc;
 
 namespace RegexCheck
 {
@@ -607,6 +609,159 @@ namespace RegexCheck
                 return ok = false;
             }
             
+        }
+
+
+        #region Inserimento nuovo indirizzo con return ADDRESSID
+        public int NewAddress(SingleTonConnectDB connect , string Address , string AddressDetail,string City ,string Region , string Country ,string PostalCode)
+        {
+            try
+            {
+                connectDB(connect.ConnectDb());
+                SqlCommand sql = sqlConnection.CreateCommand();
+                sql.CommandType = System.Data.CommandType.StoredProcedure;
+                sql.CommandText = "AddressInsertData";
+               
+                sql.Parameters.AddWithValue("@address", Address);
+                sql.Parameters.AddWithValue("@addrDetail", AddressDetail);
+                sql.Parameters.AddWithValue("@city", City);
+                sql.Parameters.AddWithValue("@region", Region);
+                sql.Parameters.AddWithValue("@country", Country);
+                sql.Parameters.AddWithValue("@postcode", PostalCode);
+                int AddressId = Convert.ToInt32(sql.ExecuteScalar());
+                connect.Dispose();
+                return AddressId;
+            }
+            catch (Exception err)
+            {
+
+                Console.WriteLine(err.Message);
+                return 0;
+            }
+           
+        }
+        #endregion
+        /// <summary>
+        /// Unione dei dati dello User con il corrispondente Address in tabella di congiunzione UserAddress
+        /// </summary>
+        /// <param name="connect"></param>
+        /// <param name="userID"></param>
+        /// <param name="addressID"></param>
+        /// 
+        #region INSERIMENTO ID UTENTE E ID ADDRESS
+        public void BindUSerAndAddress(SingleTonConnectDB connect, int userID, int addressID)
+        {
+            try
+            {
+                connectDB(connect.ConnectDb());
+                SqlCommand sql = sqlConnection.CreateCommand();
+                sql.CommandType = System.Data.CommandType.StoredProcedure;
+                sql.CommandText = "BindAddress&User";
+
+                sql.Parameters.AddWithValue("@userID", userID);
+                sql.Parameters.AddWithValue("@addressID", addressID);
+                sql.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                connect.Dispose();
+            }
+        }
+        #endregion
+
+        public int OrderHeaderInsert(SingleTonConnectDB connect, int addressID , int customerId , int subtotal)
+        {
+            DateTime date = DateTime.Today;
+            
+            try
+            {
+                connectDB(connect.ConnectDb());
+                SqlCommand sql = sqlConnection.CreateCommand();
+                sql.CommandType = System.Data.CommandType.StoredProcedure;
+                sql.CommandText = "OrderHeader_heloData";
+                sql.Parameters.AddWithValue("@customerID", customerId);
+                sql.Parameters.AddWithValue("@addressID", addressID);
+                sql.Parameters.AddWithValue("@orderdate", date);
+                sql.Parameters.AddWithValue("@subtotal", subtotal);
+                int OrderID = Convert.ToInt32(sql.ExecuteScalar());
+                return OrderID;
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+            finally
+            {
+                connect.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Inserimento dati in OrderDetail dopo aver effettuato un acquisto
+        /// </summary>
+        /// <param name="connect"></param>
+        /// <param name="quantity"></param>
+        /// <param name="productID"></param>
+        /// <param name="unitPrice"></param>
+        /// <param name="totPrice"></param>
+        public void OrderDetilInsert(SingleTonConnectDB connect, int quantity, int productID, decimal unitPrice, decimal totPrice , int OrderId)
+        {
+            try
+            {
+                connectDB(connect.ConnectDb());
+                SqlCommand sql = sqlConnection.CreateCommand();
+                sql.CommandType = System.Data.CommandType.StoredProcedure;
+                sql.CommandText = "OrderDetailData_mainDB";
+
+                sql.Parameters.AddWithValue("@prodID", productID);
+                sql.Parameters.AddWithValue("@quantity", quantity);
+                sql.Parameters.AddWithValue("@unitprice", unitPrice);
+                sql.Parameters.AddWithValue("@totprice", totPrice);
+                sql.Parameters.AddWithValue("@orderID", OrderId);
+
+                sql.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                connect.Dispose();
+            }
+        }
+
+        public int CheckAddress(SingleTonConnectDB connect , int userid , string address)
+        {
+            try
+            {
+                connectDB(connect.ConnectDb());
+                SqlCommand sql = sqlConnection.CreateCommand();
+                sql.CommandType = System.Data.CommandType.StoredProcedure;
+                sql.CommandText = "CheckAddress";
+                sql.Parameters.AddWithValue("@UserID", userid);
+                sql.Parameters.AddWithValue("@address", address);
+                int AddressId = Convert.ToInt32(sql.ExecuteScalar());
+                return AddressId;
+            }
+            catch (Exception err)
+            {
+
+                Console.WriteLine("nessun indirizzo con questo utente ");
+                return 0;
+            }
+            finally { connect.Dispose(); }
         }
 
     }
