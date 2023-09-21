@@ -18,14 +18,16 @@ namespace Betacomio_Project.ControllersBeta
     public class OrderProxiesController : ControllerBase
     {
         private readonly SingleTonConnectDB _connect;
+        private readonly MainSingleton _connectao;
         private readonly AdminLogContext _context;
         private readonly RegexCh _reg;
 
-        public OrderProxiesController(AdminLogContext context , RegexCh reg , SingleTonConnectDB connect)
+        public OrderProxiesController(AdminLogContext context , RegexCh reg , SingleTonConnectDB connect, MainSingleton connectao)
         {
             _context = context;
             _reg = reg;
             _connect = connect;
+            _connectao = connectao;
         }
 
         // GET: api/OrderProxies
@@ -94,7 +96,7 @@ namespace Betacomio_Project.ControllersBeta
         public async Task<ActionResult<OrderProxy>> PostOrderProxy(OrderProxy orderproxy)
         {
             int IDAddress = 0;
-            int AddressExist = _reg.CheckAddress(_connect, orderproxy.userUniqueData.CustomerId, orderproxy.userUniqueData.Address);
+            int AddressExist = _reg.CheckAddress(_connectao, orderproxy.userUniqueData.CustomerId, orderproxy.userUniqueData.Address);
             //1 inserimento dati ADDRESS
             if ( AddressExist == 0)
             {

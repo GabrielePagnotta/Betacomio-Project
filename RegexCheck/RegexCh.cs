@@ -742,11 +742,11 @@ namespace RegexCheck
             }
         }
 
-        public int CheckAddress(SingleTonConnectDB connect , int userid , string address)
+        public int CheckAddress(MainSingleton connectao , int userid , string address)
         {
             try
             {
-                connectDB(connect.ConnectDb());
+                connectDB(connectao.ConnectToMainDB());
                 SqlCommand sql = sqlConnection.CreateCommand();
                 sql.CommandType = System.Data.CommandType.StoredProcedure;
                 sql.CommandText = "CheckAddress";
@@ -761,7 +761,7 @@ namespace RegexCheck
                 Console.WriteLine("nessun indirizzo con questo utente ");
                 return 0;
             }
-            finally { connect.Dispose(); }
+            finally { connectao.Dispose(); }
         }
 
     }
