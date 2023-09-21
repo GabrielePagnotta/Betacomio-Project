@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 
 namespace Betacomio_Project.LogModels;
@@ -16,16 +17,18 @@ public class OrderProxy
 public class OrderDetailData
 {
     //dati per ogni singolo prodotto
-    public int? ProductId { get; set; }
-    public short? OrderQty { get; set; }
-    public decimal? UnitPrice { get; set; }
-    public decimal? TotalPrice { get; set; }
+    [Key]
+    public int ProductId { get; set; }
+    public short OrderQty { get; set; }
+    public decimal UnitPrice { get; set; }
+    public decimal TotalPrice { get; set; }
 
 }
 
 public class UniqueData
 {
-    public int? CustomerId { get; set; }  //user id token
+    [Key]
+    public int CustomerId { get; set; }  //user id token
 
     public int? AddressId { get; set; }
 
@@ -41,6 +44,6 @@ public class UniqueData
 
     public string? PostalCode { get; set; }
 
-    public decimal? SubTotal { get; set; }  //totale carrello
+    public decimal SubTotal { get; set; }  //totale carrello
 
 }

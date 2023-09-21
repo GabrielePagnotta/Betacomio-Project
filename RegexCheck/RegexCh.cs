@@ -609,6 +609,73 @@ namespace RegexCheck
             
         }
 
+        /// <summary>
+        /// Unione dei dati dello User con il corrispondente Address in tabella di congiunzione UserAddress
+        /// </summary>
+        /// <param name="connect"></param>
+        /// <param name="userID"></param>
+        /// <param name="addressID"></param>
+        public void BindUSerAndAddress(SingleTonConnectDB connect , int userID, int addressID)
+        {
+            try
+            {
+                connectDB(connect.ConnectDb());
+                SqlCommand sql = sqlConnection.CreateCommand();
+                sql.CommandType = System.Data.CommandType.StoredProcedure;
+                sql.CommandText = "BindAddress&User";
+
+                sql.Parameters.AddWithValue("@userID", userID);
+                sql.Parameters.AddWithValue("@addressID", addressID);
+                sql.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                connect.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Inserimento dati in OrderDetail dopo aver effettuato un acquisto
+        /// </summary>
+        /// <param name="connect"></param>
+        /// <param name="quantity"></param>
+        /// <param name="productID"></param>
+        /// <param name="unitPrice"></param>
+        /// <param name="totPrice"></param>
+        public void OrderDetilInsert(SingleTonConnectDB connect, int quantity, int productID, decimal unitPrice, decimal totPrice)
+        {
+            try
+            {
+                connectDB(connect.ConnectDb());
+                SqlCommand sql = sqlConnection.CreateCommand();
+                sql.CommandType = System.Data.CommandType.StoredProcedure;
+                sql.CommandText = "OrderDetailData_mainDB";
+
+                sql.Parameters.AddWithValue("@prodID", productID);
+                sql.Parameters.AddWithValue("@quantity", quantity);
+                sql.Parameters.AddWithValue("@unitprice", unitPrice);
+                sql.Parameters.AddWithValue("@totprice", totPrice);
+
+                sql.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                connect.Dispose();
+            }
+        }
+
     }
 
 }

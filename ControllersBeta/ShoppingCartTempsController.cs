@@ -122,7 +122,7 @@ namespace Betacomio_Project.ControllersBeta
                 }
             }
 
-            return Ok($"Oggetto aggiunto con successo nel carrello per utente: {shoppingCartItem.UserId}");
+            return Ok();
         }
 
         // DELETE: api/ShoppingCartTemps/5

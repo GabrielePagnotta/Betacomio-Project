@@ -87,9 +87,16 @@ namespace Betacomio_Project.ControllersBeta
         public async Task<ActionResult<OrderProxy>> PostOrderProxy(OrderProxy orderproxy)
         {
             
+            //1) Inserimento dati in Addresses
+            
+            //2) Inserimento dati in UserAddress
 
-            //_context.OrderProxies.Add(orderProxy);
-            //await _context.SaveChangesAsync();
+            //ricevo AddressID dell'ultimo record inserito in Addresses
+
+            //3) Inserimento dati in OrderHeader
+
+            //4) Inserimento dati in OrderDetail
+
 
             return Ok();
         }

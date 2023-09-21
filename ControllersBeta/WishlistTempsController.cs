@@ -127,7 +127,7 @@ namespace Betacomio_Project.ControllersBeta
                 }
             }
 
-            return Ok($"Oggetto aggiunto con successo nella wishlist per utente: {wishItem.UserId}");
+            return Ok();
         }
 
         [HttpDelete("{id}")]
