@@ -11,6 +11,7 @@ using RegexCheck;
 using Microsoft.AspNetCore.Authorization;
 using Betacomio_Project.BusinessLogic;
 using NLog;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Betacomio_Project.ControllersBeta
 {
@@ -123,6 +124,9 @@ namespace Betacomio_Project.ControllersBeta
         [HttpPost]
         public async Task<ActionResult<UserCredential>> PostUserCredential(SingleTonConnectDB connection, UserCredential userCredential)
         {
+            var responsedata = new { userCredential.Email, userCredential.PasswordHash };
+            
+            
             if (_context.UserCredentials == null)
             {
                 return Problem("Entity set 'UserRegistryContext.Users'  is null.");
@@ -143,9 +147,9 @@ namespace Betacomio_Project.ControllersBeta
 
             }
 
+            Console.WriteLine(userCredential.PasswordHash);
 
-
-            return Ok();
+            return Ok(responsedata);
         }
 
         // DELETE: api/UserCredentials/5
