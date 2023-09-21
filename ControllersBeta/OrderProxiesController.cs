@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Betacomio_Project.LogModels;
 using Microsoft.IdentityModel.Tokens;
+using RegexCheck;
+using Betacomio_Project.ConnectDb;
+using System.Runtime.InteropServices;
 
 namespace Betacomio_Project.ControllersBeta
 {
@@ -14,11 +17,15 @@ namespace Betacomio_Project.ControllersBeta
     [ApiController]
     public class OrderProxiesController : ControllerBase
     {
+        private readonly SingleTonConnectDB _connect;
         private readonly AdminLogContext _context;
+        private readonly RegexCh _reg;
 
-        public OrderProxiesController(AdminLogContext context)
+        public OrderProxiesController(AdminLogContext context , RegexCh reg , SingleTonConnectDB connect)
         {
             _context = context;
+            _reg = reg;
+            _connect = connect;
         }
 
         // GET: api/OrderProxies
@@ -86,18 +93,30 @@ namespace Betacomio_Project.ControllersBeta
         [HttpPost]
         public async Task<ActionResult<OrderProxy>> PostOrderProxy(OrderProxy orderproxy)
         {
+            int IDAddress = 0;
+            int AddressExist = _reg.CheckAddress(_connect, orderproxy.userUniqueData.CustomerId, orderproxy.userUniqueData.Address);
+            //1 inserimento dati ADDRESS
+            if ( AddressExist == 0)
+            {
+                IDAddress = _reg.NewAddress(_connect, orderproxy.userUniqueData.Address, orderproxy.userUniqueData.AddressDetail, orderproxy.userUniqueData.City, orderproxy.userUniqueData.Region, orderproxy.userUniqueData.Country, orderproxy.userUniqueData.PostalCode);
+               // 2/CONTROLLO SE ESISTE UTENTE O INDIRIZZO
+                _reg.BindUSerAndAddress(_connect, orderproxy.userUniqueData.CustomerId, IDAddress);
+            }
+            else
+            {
+                IDAddress = AddressExist;
+            }
+         
+         
+           //3 inserimento dati nell'order header////
+           int OrderID =  _reg.OrderHeaderInsert(_connect, IDAddress, orderproxy.userUniqueData.CustomerId, (int)orderproxy.userUniqueData.SubTotal);
+         
+          //4 ciclo per numero dei prodotti 
+            foreach (var item in orderproxy.detailData)
+            {
+                _reg.OrderDetilInsert(_connect, item.OrderQty , item.ProductId, item.UnitPrice, item.TotalPrice , OrderID);
+            }
             
-            //1) Inserimento dati in Addresses
-            
-            //2) Inserimento dati in UserAddress
-
-            //ricevo AddressID dell'ultimo record inserito in Addresses
-
-            //3) Inserimento dati in OrderHeader
-
-            //4) Inserimento dati in OrderDetail
-
-
             return Ok();
         }
 
