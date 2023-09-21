@@ -163,14 +163,14 @@ namespace Betacomio_Project.Controllers
         }
 
         // DELETE: api/ShoppingCart/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteShoppingCart(int id)
+        [HttpDelete("{id}/{ProductId}")]
+        public async Task<IActionResult> DeleteShoppingCart(int id, int ProductId)
         {
             if (_context.ShoppingCarts == null)
             {
                 return NotFound();
             }
-            var shoppingCart = await _context.ShoppingCarts.FindAsync(id);
+            var shoppingCart = await _context.ShoppingCarts.FindAsync(id, ProductId);
             if (shoppingCart == null)
             {
                 return NotFound();
