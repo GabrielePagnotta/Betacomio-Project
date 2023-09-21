@@ -96,7 +96,7 @@ namespace Betacomio_Project.ControllersBeta
         public async Task<ActionResult<OrderProxy>> PostOrderProxy(OrderProxy orderproxy)
         {
             int IDAddress = 0;
-            int AddressExist = _reg.CheckAddress(_connectao, orderproxy.userUniqueData.CustomerId, orderproxy.userUniqueData.Address);
+            int AddressExist = _reg.CheckAddress(_connect, orderproxy.userUniqueData.CustomerId, orderproxy.userUniqueData.Address);
             //1 inserimento dati ADDRESS
             if ( AddressExist == 0)
             {
@@ -118,6 +118,8 @@ namespace Betacomio_Project.ControllersBeta
             {
                 _reg.OrderDetilInsert(_connect, item.OrderQty , item.ProductId, item.UnitPrice, item.TotalPrice , OrderID);
             }
+
+
             
             return Ok();
         }
@@ -130,7 +132,7 @@ namespace Betacomio_Project.ControllersBeta
             {
                 return NotFound();
             }
-            var orderProxy = await _context.OrderProxies.FindAsync(id);
+            var orderProxy = await _context.OrderProxies.FindAsync(id); 
             if (orderProxy == null)
             {
                 return NotFound();

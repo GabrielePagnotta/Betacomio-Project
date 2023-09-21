@@ -742,11 +742,11 @@ namespace RegexCheck
             }
         }
 
-        public int CheckAddress(MainSingleton connectao , int userid , string address)
+        public int CheckAddress(SingleTonConnectDB connectao , int userid , string address)
         {
             try
             {
-                connectDB(connectao.ConnectToMainDB());
+                connectDB(connectao.ConnectDb());
                 SqlCommand sql = sqlConnection.CreateCommand();
                 sql.CommandType = System.Data.CommandType.StoredProcedure;
                 sql.CommandText = "CheckAddress";
@@ -762,6 +762,13 @@ namespace RegexCheck
                 return 0;
             }
             finally { connectao.Dispose(); }
+        }
+
+        public void ClearCash(SingleTonConnectDB connect)
+        {
+            connectDB(connect.ConnectDb());
+            SqlCommand sql = sqlConnection.CreateCommand();
+            sql.CommandType = System.Data.CommandType.StoredProcedure;
         }
 
     }
