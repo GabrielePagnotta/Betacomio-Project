@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Betacomio_Project.NewModels;
 using NLog;
+using Betacomio_Project.LogModels;
 
 namespace Betacomio_Project.Controllers
 {
@@ -102,36 +103,7 @@ namespace Betacomio_Project.Controllers
             return NoContent();
         }
 
-        // PUT: api/ShoppingCart/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchShoppingCart(int id, ShoppingCart shoppingCart)
-        {
-            if (id != shoppingCart.UserId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(shoppingCart).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ShoppingCartExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
+        
 
         // POST: api/ShoppingCart
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -162,7 +134,7 @@ namespace Betacomio_Project.Controllers
             return CreatedAtAction("GetShoppingCart", new { id = shoppingCart.UserId }, shoppingCart);
         }
 
-        // DELETE: api/ShoppingCart/5
+        // DELETE: api/DeleteSingleInCart/5/12
         [HttpDelete("{id}/{ProductId}")]
         public async Task<IActionResult> DeleteShoppingCart(int id, int ProductId)
         {
@@ -181,6 +153,8 @@ namespace Betacomio_Project.Controllers
 
             return NoContent();
         }
+
+
 
         private bool ShoppingCartExists(int id)
         {
