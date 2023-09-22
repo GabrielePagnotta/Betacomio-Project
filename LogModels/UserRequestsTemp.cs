@@ -9,9 +9,9 @@ public partial class UserRequestsTemp
 
     public int UserId { get; set; }
 
-    public string RequestObject { get; set; } = null!;
+    public string Object { get; set; } = null!;
 
-    public string RequestBody { get; set; } = null!;
+    public string Description { get; set; } = null!;
 
-    public byte[]? Image { get; set; }
+    public byte[]? Email { get; set; }
 }

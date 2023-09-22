@@ -97,11 +97,12 @@ namespace Betacomio_Project.ControllersBeta
         {
             int IDAddress = 0;
             int AddressExist = _reg.CheckAddress(_connectao, orderproxy.userUniqueData.CustomerId, orderproxy.userUniqueData.Address);
-            //1 inserimento dati ADDRESS
+            // 1) inserimento dati in Addresses
             if ( AddressExist == 0)
             {
                 IDAddress = _reg.NewAddress(_connect, orderproxy.userUniqueData.Address, orderproxy.userUniqueData.AddressDetail, orderproxy.userUniqueData.City, orderproxy.userUniqueData.Region, orderproxy.userUniqueData.Country, orderproxy.userUniqueData.PostalCode);
-               // 2/CONTROLLO SE ESISTE UTENTE O INDIRIZZO
+
+               // 2) Controllo se esiste associazione utente - indirizzo in UserAddress
                 _reg.BindUSerAndAddress(_connect, orderproxy.userUniqueData.CustomerId, IDAddress);
             }
             else
@@ -110,10 +111,10 @@ namespace Betacomio_Project.ControllersBeta
             }
          
          
-           //3 inserimento dati nell'order header////
+           // 3) inserimento dati in Order Header + ottengo OrderID 
            int OrderID =  _reg.OrderHeaderInsert(_connect, IDAddress, orderproxy.userUniqueData.CustomerId, (int)orderproxy.userUniqueData.SubTotal);
          
-          //4 ciclo per numero dei prodotti 
+          //  4) Inserisco i dati in OrderDetail (ciclando prodotti carrello)
             foreach (var item in orderproxy.detailData)
             {
                 _reg.OrderDetilInsert(_connect, item.OrderQty , item.ProductId, item.UnitPrice, item.TotalPrice , OrderID);

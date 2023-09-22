@@ -106,12 +106,12 @@ public partial class AdminLogContext : DbContext
             entity.Property(e => e.RequestId)
                 .ValueGeneratedNever()
                 .HasColumnName("RequestID");
-            entity.Property(e => e.RequestBody)
+            entity.Property(e => e.Description)
                 .HasColumnType("text")
-                .HasColumnName("Request_Body");
-            entity.Property(e => e.RequestObject)
+                .HasColumnName("Description");
+            entity.Property(e => e.Object)
                 .HasMaxLength(150)
-                .HasColumnName("Request_Object");
+                .HasColumnName("Object");
             entity.Property(e => e.UserId).HasColumnName("UserID");
         });
 
