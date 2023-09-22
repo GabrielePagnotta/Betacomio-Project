@@ -119,6 +119,8 @@ namespace Betacomio_Project.ControllersBeta
             {
                 _reg.OrderDetilInsert(_connect, item.OrderQty , item.ProductId, item.UnitPrice, item.TotalPrice , OrderID);
             }
+
+
             
             return Ok();
         }
@@ -131,7 +133,7 @@ namespace Betacomio_Project.ControllersBeta
             {
                 return NotFound();
             }
-            var orderProxy = await _context.OrderProxies.FindAsync(id);
+            var orderProxy = await _context.OrderProxies.FindAsync(id); 
             if (orderProxy == null)
             {
                 return NotFound();

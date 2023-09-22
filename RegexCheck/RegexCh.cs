@@ -764,6 +764,13 @@ namespace RegexCheck
             finally { connect.Dispose(); }
         }
 
+        public void ClearCash(SingleTonConnectDB connect)
+        {
+            connectDB(connect.ConnectDb());
+            SqlCommand sql = sqlConnection.CreateCommand();
+            sql.CommandType = System.Data.CommandType.StoredProcedure;
+        }
+
     }
 
 }
