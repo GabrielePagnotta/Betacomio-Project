@@ -96,7 +96,7 @@ namespace Betacomio_Project.ControllersBeta
         public async Task<ActionResult<OrderProxy>> PostOrderProxy(OrderProxy orderproxy)
         {
             int IDAddress = 0;
-            int AddressExist = _reg.CheckAddress(_connectao, orderproxy.userUniqueData.CustomerId, orderproxy.userUniqueData.Address);
+            int AddressExist = _reg.CheckAddress(_connect, orderproxy.userUniqueData.CustomerId, orderproxy.userUniqueData.Address);
             // 1) inserimento dati in Addresses
             if ( AddressExist == 0)
             {

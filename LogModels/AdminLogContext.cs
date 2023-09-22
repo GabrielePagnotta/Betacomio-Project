@@ -7,7 +7,6 @@ namespace Betacomio_Project.LogModels;
 public partial class AdminLogContext : DbContext
 {
 
-
     public AdminLogContext(DbContextOptions<AdminLogContext> options)
         : base(options)
     {
@@ -17,8 +16,6 @@ public partial class AdminLogContext : DbContext
 
     public virtual DbSet<OrderProxy> OrderProxies { get; set; }
 
-   
-
     public virtual DbSet<ShoppingCartTemp> ShoppingCartTemps { get; set; }
 
     public virtual DbSet<UserCredential> UserCredentials { get; set; }
@@ -26,7 +23,6 @@ public partial class AdminLogContext : DbContext
     public virtual DbSet<UserRequestsTemp> UserRequestsTemps { get; set; }
 
     public virtual DbSet<WishlistTemp> WishlistTemps { get; set; }
-
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -56,10 +52,9 @@ public partial class AdminLogContext : DbContext
             entity.ToTable("Order_Proxy");
 
             entity.Property(e => e.GenericId).HasColumnName("GenericID");
-       
+
         });
 
-       
 
         modelBuilder.Entity<ShoppingCartTemp>(entity =>
         {
@@ -103,15 +98,9 @@ public partial class AdminLogContext : DbContext
 
             entity.ToTable("UserRequestsTemp");
 
-            entity.Property(e => e.RequestId)
-                .ValueGeneratedNever()
-                .HasColumnName("RequestID");
-            entity.Property(e => e.Description)
-                .HasColumnType("text")
-                .HasColumnName("Description");
-            entity.Property(e => e.Object)
-                .HasMaxLength(150)
-                .HasColumnName("Object");
+            entity.Property(e => e.RequestId).HasColumnName("RequestID");
+            entity.Property(e => e.Email).HasMaxLength(50);
+            entity.Property(e => e.Object).HasMaxLength(150);
             entity.Property(e => e.UserId).HasColumnName("UserID");
         });
 
