@@ -4,6 +4,7 @@ using Betacomio_Project.LogModels;
 using Betacomio_Project.NewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using NLog;
 using RegexCheck;
@@ -58,7 +59,7 @@ namespace Betacomio_Project.Controllers
         }
 
         [HttpGet("GetUserProductsByLanguage")]
-        public async Task<ActionResult<IEnumerable<ViewUserProduct>>> GetUserProductsByLanguage(MainSingleton connectao, [FromQuery] int nationality)
+        public async Task<ActionResult<IEnumerable<ViewUserProduct>>> GetUserProductsByLanguage([FromQuery] int nationality)
         {
             try
             {
@@ -67,7 +68,15 @@ namespace Betacomio_Project.Controllers
                     return NotFound();
                 }
 
-                var productsByLanguage = await _regex.ProductsWithLanguage(connectao, nationality);
+                var nationalLanguages = await _context.LanguageEnums
+                    .Where(lang => lang.Id == nationality)
+                    .Select(lang => lang.LanguageCode)
+                    .FirstAsync(); // Estrae lingua in base a input utente
+
+                var productsByLanguage = await _context.ViewUserProducts
+                    .Where(val => nationalLanguages.Equals(val.Culture)) // confronto lingua utente con lingua prodotti in DB
+                    .ToListAsync();
+
                 return Ok(productsByLanguage);
                 
             }
